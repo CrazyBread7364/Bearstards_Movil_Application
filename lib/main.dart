@@ -74,6 +74,32 @@ class Entry {
   final List<String> tags;
 }
 
+class PhaseInfo {
+  const PhaseInfo(this.title, this.time, this.description, this.asset, this.color);
+  final String title, time, description, asset;
+  final Color color;
+}
+
+const phases = <PhaseInfo>[
+  PhaseInfo('luces apagadas', '0–5 min', 'La tienda inicia con iluminación reducida. Observa antes de exponerte.', A.phaseLightsOff, C.sky),
+  PhaseInfo('mercancía nueva', '5–10 min', 'Aparece la pistola de dardos: 6 disparos de 50 de daño.', A.phaseNewStock, C.sun),
+  PhaseInfo('remate final', '10–15 min', 'Última fase de la partida. Lee las rutas y evita acciones delatoras.', A.phaseFinalSale, C.pink),
+];
+
+class StealthAction {
+  const StealthAction(this.label, this.description, this.asset, this.color, this.safe);
+  final String label, description, asset;
+  final Color color;
+  final bool safe;
+}
+
+const stealthActions = <StealthAction>[
+  StealthAction('caminar sin armas', 'Te mezclas con los NPC y resulta más difícil distinguirte.', A.mechanicWalk, C.mint, true),
+  StealthAction('correr te delata', 'El movimiento apresurado da una pista de que un jugador controla al oso.', A.mechanicRun, C.pink, false),
+  StealthAction('saltar te delata', 'Brincar rompe el patrón de rutina de los NPC y atrae sospechas.', A.mechanicJump, C.pink, false),
+  StealthAction('llevar un arma te delata', 'Un arma visible distingue al oso jugador de un NPC desarmado.', A.mechanicWeapon, C.pink, false),
+];
+
 const entries = <Entry>[
   Entry('osos NPC', 'camuflaje, rutina y sospechas', 'personajes', Icons.face_6_rounded, C.sky, ['camuflaje', 'observa patrones'], 'Los NPC recorren La Juguetería con movimientos repetidos. Mezclarte con ellos ayuda a ocultar tu identidad, pero una acción fuera de rutina puede delatarte.', 'Imita el ritmo de los NPC antes de intentar sorprender a otro jugador.'),
   Entry('aguja para coser', 'arma cuerpo a cuerpo: 25 de daño', 'armas', Icons.push_pin_rounded, C.pink, ['25 daño', 'cuerpo a cuerpo'], 'La aguja es el arma del MVP para un enfrentamiento cercano. Cada golpe causa 25 de daño.', 'Acércate sin correr para reducir las sospechas antes de atacar.'),
@@ -153,21 +179,58 @@ class DetailScreen extends StatelessWidget {
   ]))));
 }
 
-class StealthGuideScreen extends StatelessWidget {
+class StealthGuideScreen extends StatefulWidget {
   const StealthGuideScreen({super.key});
-  @override Widget build(BuildContext context) => Scaffold(body: Night(child: SafeArea(child: Column(children: [
-    const TopBar('sigilo'),
-    Expanded(child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 28), children: [
-      const StealthIdentityCard(), const SizedBox(height: 16),
-      GridView.count(crossAxisCount: 2, shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), childAspectRatio: .92, crossAxisSpacing: 12, mainAxisSpacing: 12, children: const [
-        StealthTile('caminar sin armas', A.mechanicWalk, C.mint, true),
-        StealthTile('correr te delata', A.mechanicRun, C.pink, false),
-        StealthTile('saltar te delata', A.mechanicJump, C.pink, false),
-        StealthTile('llevar un arma te delata', A.mechanicWeapon, C.pink, false),
-      ]),
-    ])),
-    Bottom(active: 1, onTap: (i) => navigateBottom(context, i)),
-  ]))));
+
+  @override
+  State<StealthGuideScreen> createState() => _StealthGuideScreenState();
+}
+
+class _StealthGuideScreenState extends State<StealthGuideScreen> {
+  int selected = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final action = stealthActions[selected];
+    return Scaffold(body: Night(child: SafeArea(child: Column(children: [
+      const TopBar('sigilo'),
+      Expanded(child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 28), children: [
+        const StealthIdentityCard(), const SizedBox(height: 16),
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          childAspectRatio: .92,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          children: List.generate(stealthActions.length, (index) => StealthTile(
+            action: stealthActions[index],
+            selected: selected == index,
+            onTap: () => setState(() => selected = index),
+          )),
+        ),
+        const SizedBox(height: 16),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 170),
+          child: ScopeCallout(
+            key: ValueKey(action.label),
+            title: action.safe ? 'acción discreta' : 'acción delatora',
+            body: action.description,
+            color: action.color,
+            icon: action.safe ? Icons.visibility_off_rounded : Icons.priority_high_rounded,
+          ),
+        ),
+        const SizedBox(height: 12),
+        const ScopeCallout(
+          title: 'regla rápida',
+          body: 'Camina sin arma para confundirte con los NPC. Correr, brincar o llevar un arma revela tu identidad.',
+          color: C.sky,
+          icon: Icons.visibility_rounded,
+        ),
+      ])),
+      Bottom(active: 1, onTap: (i) => navigateBottom(context, i)),
+    ]))));
+  }
 }
 
 class MapGuideScreen extends StatelessWidget {
@@ -181,6 +244,7 @@ class MapGuideScreen extends StatelessWidget {
         SizedBox(height: 6), Text('Las estanterías bloquean la vista y crean rutas para moverte sin levantar sospechas.', style: TextStyle(height: 1.25, fontWeight: FontWeight.w600)),
       ])),
       SizedBox(height: 16), PhaseStrip(),
+      SizedBox(height: 16), ScopeCallout(title: 'lectura del mapa', body: 'Son 3 pasillos. Las estanterías bloquean la visión y los NPC recorren rutas que puedes usar como cobertura.', color: C.mint, icon: Icons.route_rounded),
     ])),
     Bottom(active: 4, onTap: (i) => navigateBottom(context, i)),
   ]))));
@@ -194,6 +258,8 @@ class ArsenalGuideScreen extends StatelessWidget {
       ArsenalWeaponCard(entry: entries[1], imageHeight: 150),
       const SizedBox(height: 16),
       ArsenalWeaponCard(entry: entries[2], imageHeight: 172),
+      const SizedBox(height: 16),
+      const ScopeCallout(title: 'lectura rápida', body: 'La aguja funciona a corta distancia. La pistola de dardos aparece en Mercancía nueva y tiene 6 disparos.', color: C.sky, icon: Icons.gps_fixed_rounded),
     ])),
     Bottom(active: 3, onTap: (i) => navigateBottom(context, i)),
   ]))));
@@ -209,6 +275,8 @@ class ObjectsGuideScreen extends StatelessWidget {
       ObjectGuideCard(entry: entries[3]),
       const SizedBox(height: 16),
       ObjectGuideCard(entry: entries[4]),
+      const SizedBox(height: 16),
+      const ScopeCallout(title: 'diferencia clave', body: 'El casco aumenta el máximo de vida a 125 y no se ve. El rollo de hilo restaura 25 puntos de vida.', color: C.pink, icon: Icons.health_and_safety_rounded),
     ])),
     Bottom(active: 2, onTap: (i) => navigateBottom(context, i)),
   ]))));
@@ -349,8 +417,127 @@ class Bear extends StatelessWidget { const Bear(this.size,{super.key}); final do
 class Heading extends StatelessWidget { const Heading(this.title,this.caption,{super.key}); final String title,caption; @override Widget build(BuildContext context)=>Row(crossAxisAlignment:CrossAxisAlignment.end,children:[Expanded(child:Text(title,style:display(25,color:C.paper))),Padding(padding:const EdgeInsets.only(bottom:3),child:Text(caption,style:const TextStyle(color:C.cream,fontSize:11,fontWeight:FontWeight.w800)))]); }
 class EmptySearch extends StatelessWidget { const EmptySearch({super.key}); @override Widget build(BuildContext context)=>Toon(color:C.cream,child:Column(children:[SizedBox(height:118,child:Image.asset(A.emptySearch,fit:BoxFit.contain)),const SizedBox(height:8),const Text('ningún oso encontró esa pista',style:TextStyle(fontWeight:FontWeight.w900,color:C.ink))])); }
 class StealthIdentityCard extends StatelessWidget { const StealthIdentityCard({super.key}); @override Widget build(BuildContext context)=>Toon(color:C.paper,padding:const EdgeInsets.all(12),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('jugador vs NPC',style:display(24)),const SizedBox(height:5),const Text('Ambos se ven parecidos. Tus acciones revelan quién controlas.',style:TextStyle(fontSize:13,fontWeight:FontWeight.w700)),const SizedBox(height:9),Row(children:[Expanded(child:Column(children:[SizedBox(height:122,child:Image.asset(A.playerBear,fit:BoxFit.contain)),const Chip('OSO JUGADOR',C.pink)])),Container(width:2,height:124,color:C.ink),Expanded(child:Column(children:[SizedBox(height:122,child:Image.asset(A.npcBear,fit:BoxFit.contain)),const Chip('OSO NPC',C.sky)]))]) ])); }
-class StealthTile extends StatelessWidget { const StealthTile(this.label,this.path,this.color,this.safe,{super.key}); final String label,path; final Color color; final bool safe; @override Widget build(BuildContext context)=>Toon(color:color,padding:const EdgeInsets.all(9),child:Column(children:[Align(alignment:Alignment.topRight,child:Icon(safe?Icons.check_circle:Icons.error_rounded,color:C.ink,size:22)),Expanded(child:Image.asset(path,fit:BoxFit.contain)),Text(label,textAlign:TextAlign.center,style:const TextStyle(fontSize:13,height:1,fontWeight:FontWeight.w900,color:C.ink))])); }
-class PhaseStrip extends StatelessWidget { const PhaseStrip({super.key}); @override Widget build(BuildContext context){const items=[('luces apagadas',A.phaseLightsOff),('mercancía nueva',A.phaseNewStock),('remate final',A.phaseFinalSale)];return Toon(color:C.cream,padding:const EdgeInsets.all(10),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('fases de la tienda',style:display(22)),const SizedBox(height:10),Row(children:items.map((item)=>Expanded(child:Column(children:[AspectRatio(aspectRatio:1.2,child:Image.asset(item.$2,fit:BoxFit.contain)),Text(item.$1,textAlign:TextAlign.center,style:const TextStyle(fontSize:10,height:1,fontWeight:FontWeight.w900))]))).toList())]));} }
+class StealthTile extends StatelessWidget {
+  const StealthTile({super.key, required this.action, required this.selected, required this.onTap});
+  final StealthAction action;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        button: true,
+        selected: selected,
+        label: action.label,
+        child: Press(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 170),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: selected ? const [BoxShadow(color: C.cream, blurRadius: 0, spreadRadius: 2)] : null,
+            ),
+            child: Toon(
+              color: action.color,
+              padding: const EdgeInsets.all(9),
+              child: Column(children: [
+                Align(alignment: Alignment.topRight, child: Icon(action.safe ? Icons.check_circle : Icons.error_rounded, color: C.ink, size: 22)),
+                Expanded(child: Image.asset(action.asset, fit: BoxFit.contain)),
+                Text(action.label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13, height: 1, fontWeight: FontWeight.w900, color: C.ink)),
+              ]),
+            ),
+          ),
+        ),
+      );
+}
+class ScopeCallout extends StatelessWidget {
+  const ScopeCallout({super.key, required this.title, required this.body, required this.color, required this.icon});
+  final String title, body;
+  final Color color;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) => Toon(
+        color: C.paper,
+        padding: const EdgeInsets.all(14),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(color: color, border: Border.all(color: C.ink, width: 2), borderRadius: BorderRadius.circular(13)),
+            child: Icon(icon, color: C.ink),
+          ),
+          const SizedBox(width: 11),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: display(20)),
+            const SizedBox(height: 4),
+            Text(body, style: const TextStyle(fontSize: 13, height: 1.25, fontWeight: FontWeight.w700)),
+          ])),
+        ]),
+      );
+}
+
+class PhaseStrip extends StatefulWidget {
+  const PhaseStrip({super.key});
+
+  @override
+  State<PhaseStrip> createState() => _PhaseStripState();
+}
+
+class _PhaseStripState extends State<PhaseStrip> {
+  int selected = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = phases[selected];
+    return Toon(
+      color: C.cream,
+      padding: const EdgeInsets.all(10),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [Text('fases de la tienda', style: display(22)), const Spacer(), Chip(phase.time, phase.color)]),
+        const SizedBox(height: 10),
+        Row(children: List.generate(phases.length, (index) {
+          final item = phases[index];
+          final active = index == selected;
+          return Expanded(
+            child: Semantics(
+              button: true,
+              selected: active,
+              label: '${item.title}, ${item.time}',
+              child: Press(
+                onTap: () => setState(() => selected = index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 170),
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: active ? item.color.withValues(alpha: .42) : Colors.transparent,
+                    border: Border.all(color: active ? C.ink : Colors.transparent, width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(children: [
+                    AspectRatio(aspectRatio: 1.2, child: Image.asset(item.asset, fit: BoxFit.contain)),
+                    Text(item.title, textAlign: TextAlign.center, style: TextStyle(fontSize: 10, height: 1, fontWeight: active ? FontWeight.w900 : FontWeight.w700)),
+                  ]),
+                ),
+              ),
+            ),
+          );
+        })),
+        const SizedBox(height: 10),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 170),
+          child: Container(
+            key: ValueKey(phase.title),
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: phase.color.withValues(alpha: .35), borderRadius: BorderRadius.circular(12), border: Border.all(color: C.ink, width: 2)),
+            child: Text(phase.description, style: const TextStyle(fontSize: 13, height: 1.22, fontWeight: FontWeight.w800)),
+          ),
+        ),
+      ]),
+    );
+  }
+}
 class Press extends StatelessWidget { const Press({super.key,required this.child,required this.onTap}); final Widget child; final VoidCallback onTap; @override Widget build(BuildContext context)=>Material(color:Colors.transparent,child:InkWell(borderRadius:BorderRadius.circular(22),onTap:onTap,child:child)); }
 Widget guideFor(int i) => switch (i) {1 => const StealthGuideScreen(),2 => const ObjectsGuideScreen(),3 => const ArsenalGuideScreen(),4 => const MapGuideScreen(),_ => const HomeScreen()};
 void navigateBottom(BuildContext context,int i){if(i==0){Navigator.popUntil(context,(route)=>route.isFirst);}else{Navigator.pushReplacement(context,MaterialPageRoute(builder:(_)=>guideFor(i)));}}
