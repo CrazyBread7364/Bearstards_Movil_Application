@@ -13,12 +13,12 @@ void main() {
   testWidgets('home shows the wiki sections and opens weapons', (tester) async {
     await tester.pumpWidget(const BastardososWikiApp());
 
-    expect(find.text('bastardosos wiki'), findsOneWidget);
-    expect(find.text('pistola de dardos'), findsOneWidget);
+    expect(find.bySemanticsLabel('Portada de Bearstards Wiki'), findsOneWidget);
+    expect(find.bySemanticsLabel('Explorar Arsenal'), findsOneWidget);
 
-    await tester.tap(find.text('armas'));
+    await tester.tap(find.bySemanticsLabel('Explorar Arsenal'));
     await tester.pumpAndSettle();
 
-    expect(find.text('spray y mechero'), findsOneWidget);
+    expect(find.text('pistola de dardos'), findsOneWidget);
   });
 }
