@@ -25,6 +25,12 @@ flutter build ios --no-codesign
 
 El proyecto incluye únicamente los targets android/ e ios/. No contiene targets de escritorio ni web.
 
+## Colaboración y versionamiento
+
+Se utiliza Git con GitHub y un flujo de ramas de trabajo, `development` y `main`. La justificación, las reglas de commits y la preparación de versiones están en [Estrategia de versionamiento](docs/versioning-strategy.md).
+
+El responsable del proyecto revisa el código y realiza todos los pushes. El agente trabaja y registra commits localmente; no publica cambios. Consulta la [guía de colaboración](CONTRIBUTING.md).
+
 ## Organización
 
 main.dart solo arranca la aplicación. La arquitectura feature-first con MVVM, los límites de dependencias y la navegación se documentan en [docs/architecture.md](docs/architecture.md).
