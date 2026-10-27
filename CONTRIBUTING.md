@@ -18,7 +18,7 @@ Esta regla se mantiene durante todo el trabajo. Finalizar una tarea o crear un c
 6. Entregar el resumen, los hashes locales, las comprobaciones y las limitaciones al responsable.
 7. Esperar la revisión del responsable, quien administra la publicación e integración.
 
-Para la tarea actual se utiliza `feat/gmd/pulir-diseno-y-funcionalidad`.
+Cada tarea nueva utiliza su propia rama; se consulta la rama activa con `git branch --show-current`. Las dependencias entre ramas pendientes de integrar se indican en la entrega.
 
 ## Mensajes de commit
 
@@ -29,6 +29,8 @@ Tipos: `feat`, `fix`, `refactor`, `test`, `docs` y `chore`.
 Cada commit corresponde a una mejora, corrección o evidencia real. Se conservan los mensajes y commits históricos.
 
 ## Comprobaciones
+
+Antes de comprobar la app se valida el SDK con `dart tool/verify_environment.dart` y se preparan los paquetes con `flutter pub get --enforce-lockfile`. Las actualizaciones intencionales de dependencias y del SDK siguen la [guía del entorno reproducible](docs/reproducible-environment.md).
 
 - Código: análisis estático y pruebas pertinentes.
 - Diseño: revisión visual y recorridos de las pantallas afectadas.

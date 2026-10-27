@@ -4,23 +4,24 @@ Wiki móvil de consulta del juego Bearstards, desarrollada con Flutter para Andr
 
 ## Ejecutar
 
-Instala Flutter compatible con el SDK declarado en pubspec.yaml y un emulador o dispositivo móvil.
+Utiliza Flutter **3.47.6 stable**, con Dart **3.13.5**, y un emulador o dispositivo móvil. La referencia exacta está en `toolchain.json`; los requisitos Android/iOS y las actualizaciones controladas se explican en [Entorno y dependencias reproducibles](docs/reproducible-environment.md).
 
 ```sh
-flutter pub get
-flutter run
+dart tool/verify_environment.dart
+flutter pub get --enforce-lockfile
+flutter run --no-pub
 ```
 
 ```sh
-flutter analyze
-flutter test
-flutter build apk --debug
+flutter analyze --no-pub
+flutter test --no-pub
+flutter build apk --debug --no-pub
 ```
 
 Para compilar iOS se necesita macOS con Xcode y la configuración de firma del equipo:
 
 ```sh
-flutter build ios --no-codesign
+flutter build ios --no-codesign --no-pub
 ```
 
 El proyecto incluye únicamente los targets android/ e ios/. No contiene targets de escritorio ni web.
