@@ -1,0 +1,24 @@
+abstract final class WikiAssets {
+  static const _base = 'assets/images/wiki_low_poly/';
+  static const background = '${_base}background_toy_warehouse_night.png';
+  static const heroBear = '${_base}bear_hero_behind_crates.png';
+  static const crates = '${_base}hero_foreground_crates.png';
+  static const sign = '${_base}logo_hanging_sign.png';
+  static const homeCharacters = '${_base}home_card_characters.png';
+  static const homeStealth = '${_base}home_card_stealth.png';
+  static const player = '${_base}bear_player_fullbody.png';
+  static const npc = '${_base}bear_npc_fullbody.png';
+  static const needle = '${_base}weapon_sewing_needle.png';
+  static const dartBlaster = '${_base}weapon_dart_blaster_v2.png';
+  static const helmet = '${_base}item_helmet_v2.png';
+  static const thread = '${_base}item_thread_spool.png';
+  static const health = '${_base}hud_yarn_health.png';
+  static const map = '${_base}map_toy_store_three_aisles.png';
+  static const lightsOff = '${_base}phase_lights_off.png';
+  static const newStock = '${_base}phase_new_stock.png';
+  static const finalSale = '${_base}phase_final_sale.png';
+  static const walk = '${_base}mechanic_walk_safe.png';
+  static const run = '${_base}mechanic_run_detected.png';
+  static const jump = '${_base}mechanic_jump_detected.png';
+  static const weapon = '${_base}mechanic_weapon_detected.png';
+}
