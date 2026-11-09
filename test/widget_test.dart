@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'suite/support/app_harness.dart' show loadWikiFonts;
+
 import 'package:bearstards_movil_application/app/app.dart';
 import 'package:bearstards_movil_application/app/navigation/wiki_routes.dart';
 import 'package:bearstards_movil_application/features/wiki/domain/models/wiki_entry.dart';
@@ -32,12 +34,7 @@ Future<void> launch(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() async {
-    final fonts = FontLoader('Vera')
-      ..addFont(rootBundle.load('assets/fonts/Vera.ttf'))
-      ..addFont(rootBundle.load('assets/fonts/VeraBd.ttf'));
-    await fonts.load();
-  });
+  setUpAll(loadWikiFonts);
   testWidgets('Personajes has its own route and does not open Sigilo', (
     tester,
   ) async {

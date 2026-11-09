@@ -3,12 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Loads the bundled font so text metrics match the device.
+/// Loads the bundled fonts so text metrics match the device.
 Future<void> loadWikiFonts() async {
-  final fonts = FontLoader('Vera')
-    ..addFont(rootBundle.load('assets/fonts/Vera.ttf'))
-    ..addFont(rootBundle.load('assets/fonts/VeraBd.ttf'));
-  await fonts.load();
+  for (final (family, assets) in [
+    ('Vera', ['assets/fonts/Vera.ttf', 'assets/fonts/VeraBd.ttf']),
+    ('LilitaOne', ['assets/fonts/LilitaOne-Regular.ttf']),
+    ('Fredoka', ['assets/fonts/Fredoka.ttf']),
+  ]) {
+    final loader = FontLoader(family);
+    for (final asset in assets) {
+      loader.addFont(rootBundle.load(asset));
+    }
+    await loader.load();
+  }
 }
 
 /// Starts the real app on the home screen with the given screen and text scale.

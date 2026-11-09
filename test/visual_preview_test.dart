@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'suite/support/app_harness.dart' show loadWikiFonts;
+
 import 'package:bearstards_movil_application/app/app.dart';
 import 'package:bearstards_movil_application/app/navigation/wiki_routes.dart';
 import 'package:bearstards_movil_application/core/assets/wiki_assets.dart';
@@ -20,12 +23,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPadding);
-    final regular = FontLoader('Vera')
-      ..addFont(rootBundle.load('assets/fonts/Vera.ttf'));
-    final bold = FontLoader('Vera')
-      ..addFont(rootBundle.load('assets/fonts/VeraBd.ttf'));
-    await regular.load();
-    await bold.load();
+    await loadWikiFonts();
     final icons = FontLoader('MaterialIcons')
       ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
     await icons.load();
