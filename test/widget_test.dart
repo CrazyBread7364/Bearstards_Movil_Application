@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'suite/support/app_harness.dart' show loadWikiFonts;
+import 'suite/support/app_harness.dart' show loadWikiFonts, openChapter;
 
 import 'package:bearstards_movil_application/app/app.dart';
 import 'package:bearstards_movil_application/app/navigation/wiki_routes.dart';
@@ -90,8 +90,7 @@ void main() {
     'all phases expose their actual change, without fixed 15-minute intervals',
     (tester) async {
       await launch(tester);
-      await tester.tap(find.bySemanticsLabel('Explorar La Juguetería'));
-      await tester.pumpAndSettle();
+      await openChapter(tester, 'Explorar La Juguetería');
       await tester.scrollUntilVisible(
         find.bySemanticsLabel('Fase 2: Mercancía nueva'),
         180,

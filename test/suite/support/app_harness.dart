@@ -39,3 +39,13 @@ Future<void> launchApp(
   );
   await tester.pumpAndSettle();
 }
+
+/// Scrolls the home screen to a chapter tile (it may be below the fold) and
+/// opens it.
+Future<void> openChapter(WidgetTester tester, String label) async {
+  final tile = find.bySemanticsLabel(label);
+  await tester.ensureVisible(tile);
+  await tester.pumpAndSettle();
+  await tester.tap(tile);
+  await tester.pumpAndSettle();
+}

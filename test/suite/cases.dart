@@ -83,7 +83,7 @@ const tc05 = TestCase(
       'Toque en "Explorar La Juguetería" y luego en las fases 2, 3 y 1 del '
       'selector',
   steps: [
-    'Tocar la tarjeta "Explorar La Juguetería".',
+    'Desplazar la portada hasta "Explorar La Juguetería" y tocar la tarjeta.',
     'Desplazar hasta el selector de fases y leer la fase inicial.',
     'Tocar "Fase 2: Mercancía nueva" y leer su descripción.',
     'Tocar "Fase 3: Remate final" y leer su descripción.',
@@ -240,6 +240,22 @@ const tc13 = TestCase(
       'sin datos se rechaza por los cuatro campos.',
 );
 
+const tc14 = TestCase(
+  id: 'TC-14',
+  title: 'La portada enlaza los cinco capítulos',
+  priority: Priority.alta,
+  requirements: ['RF-01', 'RF-04'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Las tarjetas "Explorar …" y un toque en "Explorar Objetos"',
+  steps: [
+    'Buscar en la portada las cinco tarjetas de capítulo.',
+    'Desplazar hasta "Explorar Objetos" y tocar la tarjeta.',
+  ],
+  expected:
+      'La portada ofrece Personajes, Sigilo, Objetos, Arsenal y La Juguetería. '
+      'La tarjeta Objetos abre la pantalla de Objetos.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -255,4 +271,5 @@ const suiteCases = [
   tc11,
   tc12,
   tc13,
+  tc14,
 ];

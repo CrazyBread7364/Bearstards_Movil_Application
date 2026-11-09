@@ -89,8 +89,7 @@ void main() {
   suiteWidgetTest(tc05, (tester) async {
     await launchApp(tester);
 
-    await tester.tap(find.bySemanticsLabel('Explorar La Juguetería'));
-    await tester.pumpAndSettle();
+    await openChapter(tester, 'Explorar La Juguetería');
     await tester.scrollUntilVisible(
       find.bySemanticsLabel('Fase 2: Mercancía nueva'),
       180,
@@ -139,6 +138,28 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ObjectsScreen), findsOneWidget);
     }
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc14, (tester) async {
+    await launchApp(tester);
+
+    for (final chapter in [
+      'Personajes',
+      'Sigilo',
+      'Objetos',
+      'Arsenal',
+      'La Juguetería',
+    ]) {
+      expect(
+        find.bySemanticsLabel('Explorar $chapter'),
+        findsOneWidget,
+        reason: chapter,
+      );
+    }
+
+    await openChapter(tester, 'Explorar Objetos');
+    expect(find.byType(ObjectsScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
