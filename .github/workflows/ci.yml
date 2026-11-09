@@ -1,0 +1,41 @@
+name: CI Bearstards Wiki
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+    branches: [development, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analisis-y-pruebas:
+    name: Análisis y pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # La versión debe coincidir con toolchain.json; el paso de validación lo comprueba.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.6
+          cache: true
+
+      - name: Validar el SDK contra toolchain.json
+        run: dart tool/verify_environment.dart
+
+      - name: Instalar dependencias con el lockfile
+        run: flutter pub get --enforce-lockfile
+
+      - name: Análisis estático
+        run: flutter analyze --no-pub
+
+      - name: Pruebas
+        run: flutter test --no-pub
