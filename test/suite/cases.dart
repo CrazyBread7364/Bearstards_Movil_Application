@@ -1,4 +1,4 @@
-import 'test_case.dart';
+import 'test_case_model.dart';
 
 const tc01 = TestCase(
   id: 'TC-01',
