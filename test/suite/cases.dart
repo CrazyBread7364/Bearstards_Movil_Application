@@ -219,6 +219,27 @@ const tc12 = TestCase(
       'archivo de assets/images/mvp/.',
 );
 
+const tc13 = TestCase(
+  id: 'TC-13',
+  title: 'Entorno reproducible',
+  priority: Priority.media,
+  requirements: ['RF-11'],
+  preconditions: 'toolchain.json presente en la raíz del proyecto',
+  input:
+      'Versión de Flutter, canal, revisión y versión de Dart, iguales y '
+      'alteradas una por una',
+  steps: [
+    'Leer toolchain.json y comprobar que sus cuatro campos están completos.',
+    'Comparar el SDK esperado contra uno idéntico.',
+    'Comparar contra SDK con un solo campo distinto, uno por campo.',
+    'Comparar contra un SDK sin datos.',
+  ],
+  expected:
+      'El archivo está completo. Un SDK idéntico se acepta y un SDK con '
+      'cualquier campo distinto se rechaza señalando solo ese campo. Un SDK '
+      'sin datos se rechaza por los cuatro campos.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -233,4 +254,5 @@ const suiteCases = [
   tc10,
   tc11,
   tc12,
+  tc13,
 ];
