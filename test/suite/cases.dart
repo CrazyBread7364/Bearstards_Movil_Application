@@ -150,5 +150,22 @@ const tc08 = TestCase(
       'abrirse ni al desplazarse.',
 );
 
+const tc09 = TestCase(
+  id: 'TC-09',
+  title: 'Adaptación en horizontal (844×390)',
+  priority: Priority.media,
+  requirements: ['RF-09'],
+  preconditions: 'Pantalla en horizontal de 844×390 y escala de texto al 100 %',
+  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  steps: [
+    'Iniciar la app con el teléfono en horizontal.',
+    'Abrir cada capítulo y desplazar hasta el final.',
+    'Abrir cada ficha de detalle y desplazar hasta el final.',
+  ],
+  expected:
+      'Ninguna pantalla produce desbordes ni excepciones de diseño, ni al '
+      'abrirse ni al desplazarse.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08, tc09];

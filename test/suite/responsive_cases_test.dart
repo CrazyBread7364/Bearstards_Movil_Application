@@ -19,4 +19,9 @@ void main() {
     await launchApp(tester, textScale: 1.8);
     await tourEveryScreen(tester);
   });
+
+  suiteWidgetTest(tc09, (tester) async {
+    await launchApp(tester, size: const Size(844, 390));
+    await tourEveryScreen(tester);
+  });
 }
