@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:bearstards_movil_application/features/wiki/domain/models/wiki_entry.dart';
 import 'package:bearstards_movil_application/features/wiki/presentation/screens/characters_screen.dart';
 import 'package:bearstards_movil_application/features/wiki/presentation/screens/entry_detail_screen.dart';
@@ -41,6 +42,24 @@ void main() {
     await tester.tap(find.byTooltip('Volver'));
     await tester.pumpAndSettle();
     expect(find.text('Dos armas.\nDos formas de actuar.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc03, (tester) async {
+    await launchApp(tester);
+
+    await tester.tap(find.bySemanticsLabel('Explorar Sigilo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Correr te delata'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Acción delatora'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    expect(find.text('Acción delatora'), findsOneWidget);
+    expect(find.textContaining('movimiento apresurado'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

@@ -36,5 +36,22 @@ const tc02 = TestCase(
       'formas de actuar." y sin errores.',
 );
 
+const tc03 = TestCase(
+  id: 'TC-03',
+  title: 'Selección en Sigilo explica la acción',
+  priority: Priority.alta,
+  requirements: ['RF-03'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toques en "Explorar Sigilo" y luego en "Correr te delata"',
+  steps: [
+    'Tocar la tarjeta "Explorar Sigilo".',
+    'Tocar la acción "Correr te delata".',
+    'Desplazar hasta el mensaje de la acción seleccionada.',
+  ],
+  expected:
+      'Se muestra "Acción delatora" con la explicación de que el movimiento '
+      'apresurado rompe la rutina de los NPC.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02];
+const suiteCases = [tc01, tc02, tc03];
