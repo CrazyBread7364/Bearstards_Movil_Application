@@ -116,5 +116,22 @@ const tc06 = TestCase(
       'Volver regresa a la lista de objetos.',
 );
 
+const tc07 = TestCase(
+  id: 'TC-07',
+  title: 'Adaptación a pantalla pequeña (320×568)',
+  priority: Priority.alta,
+  requirements: ['RF-09'],
+  preconditions: 'Pantalla de 320×568 y escala de texto al 100 %',
+  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  steps: [
+    'Iniciar la app en una pantalla de 320×568.',
+    'Abrir cada capítulo y desplazar hasta el final.',
+    'Abrir cada ficha de detalle y desplazar hasta el final.',
+  ],
+  expected:
+      'Ninguna pantalla produce desbordes ni excepciones de diseño, ni al '
+      'abrirse ni al desplazarse.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07];
