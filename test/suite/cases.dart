@@ -133,5 +133,22 @@ const tc07 = TestCase(
       'abrirse ni al desplazarse.',
 );
 
+const tc08 = TestCase(
+  id: 'TC-08',
+  title: 'Adaptación con texto al 180 %',
+  priority: Priority.alta,
+  requirements: ['RF-09'],
+  preconditions: 'Pantalla de 390×844 y escala de texto al 180 %',
+  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  steps: [
+    'Iniciar la app con el texto ampliado al 180 %.',
+    'Abrir cada capítulo y desplazar hasta el final.',
+    'Abrir cada ficha de detalle y desplazar hasta el final.',
+  ],
+  expected:
+      'Ninguna pantalla produce desbordes ni excepciones de diseño, ni al '
+      'abrirse ni al desplazarse.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08];
