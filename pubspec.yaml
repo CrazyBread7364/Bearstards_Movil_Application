@@ -19,6 +19,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/bitstream-vera-license.txt
+    - assets/fonts/lilita-one-ofl-license.txt
+    - assets/fonts/fredoka-ofl-license.txt
     - assets/images/wiki_low_poly/background_toy_warehouse_night.png
     - assets/images/wiki_low_poly/bear_hero_behind_crates.png
     - assets/images/wiki_low_poly/bear_player_fullbody.png
@@ -47,3 +49,9 @@ flutter:
         - asset: assets/fonts/Vera.ttf
         - asset: assets/fonts/VeraBd.ttf
           weight: 700
+    - family: LilitaOne
+      fonts:
+        - asset: assets/fonts/LilitaOne-Regular.ttf
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka.ttf
