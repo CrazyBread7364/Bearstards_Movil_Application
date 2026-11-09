@@ -167,5 +167,23 @@ const tc09 = TestCase(
       'abrirse ni al desplazarse.',
 );
 
+const tc10 = TestCase(
+  id: 'TC-10',
+  title: 'Catálogo completo e inmutable',
+  priority: Priority.alta,
+  requirements: ['RF-07', 'RF-11'],
+  preconditions: 'Repositorio local del catálogo (LocalWikiRepository)',
+  input: 'Categorías armas y objetos; los cuatro identificadores de entrada',
+  steps: [
+    'Consultar las entradas de la categoría armas y de la categoría objetos.',
+    'Intentar vaciar la lista de armas devuelta.',
+    'Consultar las reglas de cada entrada por su identificador.',
+  ],
+  expected:
+      'Armas contiene la aguja y la pistola; objetos contiene el casco y el '
+      'rollo de hilo. La lista devuelta no se puede modificar y cada entrada '
+      'tiene al menos una regla.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08, tc09];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08, tc09, tc10];
