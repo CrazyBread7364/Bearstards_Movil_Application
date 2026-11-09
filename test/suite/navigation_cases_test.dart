@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bearstards_movil_application/features/wiki/domain/models/wiki_entry.dart';
 import 'package:bearstards_movil_application/features/wiki/presentation/screens/characters_screen.dart';
 import 'package:bearstards_movil_application/features/wiki/presentation/screens/entry_detail_screen.dart';
+import 'package:bearstards_movil_application/features/wiki/presentation/screens/objects_screen.dart';
 import 'package:bearstards_movil_application/features/wiki/presentation/screens/stealth_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -112,6 +113,32 @@ void main() {
     expect(find.textContaining('iluminación reducida'), findsOneWidget);
 
     expect(find.text('10–15 min'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc06, (tester) async {
+    await launchApp(tester);
+
+    await tester.tap(find.bySemanticsLabel('Explorar Sigilo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Ir a Objetos'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ObjectsScreen), findsOneWidget);
+
+    for (final title in ['Casco', 'Rollo de hilo']) {
+      await tester.scrollUntilVisible(
+        find.bySemanticsLabel('Consultar $title'),
+        180,
+      );
+      await tester.tap(find.bySemanticsLabel('Consultar $title'));
+      await tester.pumpAndSettle();
+      expect(find.byType(EntryDetailScreen), findsOneWidget);
+      expect(find.text(title), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Volver'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ObjectsScreen), findsOneWidget);
+    }
     expect(tester.takeException(), isNull);
   });
 }

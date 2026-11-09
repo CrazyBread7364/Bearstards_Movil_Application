@@ -96,5 +96,25 @@ const tc05 = TestCase(
       'intervalo fijo de 10–15 minutos.',
 );
 
+const tc06 = TestCase(
+  id: 'TC-06',
+  title: 'Objetos desde la navegación inferior',
+  priority: Priority.alta,
+  requirements: ['RF-04', 'RF-01'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input:
+      'Toques en "Explorar Sigilo", "Ir a Objetos" y en las fichas "Casco" '
+      'y "Rollo de hilo"',
+  steps: [
+    'Tocar la tarjeta "Explorar Sigilo".',
+    'Tocar "Ir a Objetos" en la navegación inferior.',
+    'Abrir la ficha "Casco", verificar su título y tocar "Volver".',
+    'Abrir la ficha "Rollo de hilo", verificar su título y tocar "Volver".',
+  ],
+  expected:
+      'Objetos se abre desde la navegación. Cada ficha muestra su título y '
+      'Volver regresa a la lista de objetos.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06];
