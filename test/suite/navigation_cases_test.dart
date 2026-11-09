@@ -62,4 +62,26 @@ void main() {
     expect(find.textContaining('movimiento apresurado'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  suiteWidgetTest(tc04, (tester) async {
+    await launchApp(tester);
+
+    await tester.tap(find.bySemanticsLabel('Explorar Sigilo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Correr te delata'));
+    await tester.pumpAndSettle();
+    final before = tester.state(find.byType(StealthScreen));
+
+    await tester.tap(find.bySemanticsLabel('Ir a Sigilo'));
+    await tester.pumpAndSettle();
+
+    expect(tester.state(find.byType(StealthScreen)), same(before));
+    await tester.scrollUntilVisible(
+      find.text('Acción delatora'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.textContaining('movimiento apresurado'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
