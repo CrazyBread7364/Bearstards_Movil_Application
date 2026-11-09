@@ -203,6 +203,22 @@ const tc11 = TestCase(
       'cambio de un modelo no altera al otro.',
 );
 
+const tc12 = TestCase(
+  id: 'TC-12',
+  title: 'Ilustraciones empaquetadas',
+  priority: Priority.media,
+  requirements: ['RF-11'],
+  preconditions: 'Paquete de la app construido para pruebas',
+  input: 'Las 21 rutas de WikiAssets y el manifiesto de assets',
+  steps: [
+    'Cargar cada ilustración declarada en WikiAssets.',
+    'Revisar el manifiesto de assets del paquete.',
+  ],
+  expected:
+      'Cada ilustración existe y no está vacía. No se empaqueta ningún '
+      'archivo de assets/images/mvp/.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -216,4 +232,5 @@ const suiteCases = [
   tc09,
   tc10,
   tc11,
+  tc12,
 ];
