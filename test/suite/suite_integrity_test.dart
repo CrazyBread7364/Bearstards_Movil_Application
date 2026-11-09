@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'cases.dart';
 import 'test_case.dart';
 
 void main() {
@@ -31,5 +32,12 @@ void main() {
       expected: 'y',
     );
     expect(broken.validate(), hasLength(5));
+  });
+
+  test('every registered case is complete and its id is unique', () {
+    final problems = [for (final c in suiteCases) ...c.validate()];
+    expect(problems, isEmpty);
+    final ids = suiteCases.map((c) => c.id).toList();
+    expect(ids.toSet(), hasLength(ids.length));
   });
 }
