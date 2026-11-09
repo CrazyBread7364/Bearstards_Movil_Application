@@ -185,5 +185,35 @@ const tc10 = TestCase(
       'tiene al menos una regla.',
 );
 
+const tc11 = TestCase(
+  id: 'TC-11',
+  title: 'Los ViewModels notifican solo ante cambios reales',
+  priority: Priority.media,
+  requirements: ['RF-03', 'RF-06'],
+  preconditions: 'StealthViewModel y PhasesViewModel creados con el catálogo',
+  input: 'Seleccionar "correr" dos veces y luego la fase "Remate final"',
+  steps: [
+    'Seleccionar la acción "correr" y volver a seleccionarla.',
+    'Seleccionar la fase "Remate final".',
+    'Contar las notificaciones de cada modelo.',
+  ],
+  expected:
+      'Cada modelo notifica una sola vez. La acción correr no es discreta, '
+      'la descripción de la fase final menciona la mitad de los NPC y el '
+      'cambio de un modelo no altera al otro.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04, tc05, tc06, tc07, tc08, tc09, tc10];
+const suiteCases = [
+  tc01,
+  tc02,
+  tc03,
+  tc04,
+  tc05,
+  tc06,
+  tc07,
+  tc08,
+  tc09,
+  tc10,
+  tc11,
+];
