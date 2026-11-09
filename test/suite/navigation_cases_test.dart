@@ -84,4 +84,34 @@ void main() {
     expect(find.textContaining('movimiento apresurado'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  suiteWidgetTest(tc05, (tester) async {
+    await launchApp(tester);
+
+    await tester.tap(find.bySemanticsLabel('Explorar La Juguetería'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.bySemanticsLabel('Fase 2: Mercancía nueva'),
+      180,
+    );
+    expect(find.text('Primer tercio'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Fase 2: Mercancía nueva'));
+    await tester.pumpAndSettle();
+    expect(find.text('Segundo tercio'), findsOneWidget);
+    expect(find.textContaining('Aparece una sola vez'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Fase 3: Remate final'));
+    await tester.pumpAndSettle();
+    expect(find.text('Último tercio'), findsOneWidget);
+    expect(find.textContaining('La mitad de los NPC'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Fase 1: Luces apagadas'));
+    await tester.pumpAndSettle();
+    expect(find.text('Primer tercio'), findsOneWidget);
+    expect(find.textContaining('iluminación reducida'), findsOneWidget);
+
+    expect(find.text('10–15 min'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

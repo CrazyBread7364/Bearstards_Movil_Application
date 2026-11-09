@@ -73,5 +73,28 @@ const tc04 = TestCase(
       'selección "Correr te delata" se mantiene.',
 );
 
+const tc05 = TestCase(
+  id: 'TC-05',
+  title: 'Las tres fases muestran su cambio real',
+  priority: Priority.alta,
+  requirements: ['RF-06', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input:
+      'Toque en "Explorar La Juguetería" y luego en las fases 2, 3 y 1 del '
+      'selector',
+  steps: [
+    'Tocar la tarjeta "Explorar La Juguetería".',
+    'Desplazar hasta el selector de fases y leer la fase inicial.',
+    'Tocar "Fase 2: Mercancía nueva" y leer su descripción.',
+    'Tocar "Fase 3: Remate final" y leer su descripción.',
+    'Tocar "Fase 1: Luces apagadas" y leer su descripción.',
+  ],
+  expected:
+      'La fase inicial es el primer tercio. La fase 2 es el segundo tercio y '
+      'anuncia que la pistola aparece una sola vez. La fase 3 indica que la '
+      'mitad de los NPC regresa a los estantes. No se publica ningún '
+      'intervalo fijo de 10–15 minutos.',
+);
+
 /// Every documented case, in order. The report reads this list.
-const suiteCases = [tc01, tc02, tc03, tc04];
+const suiteCases = [tc01, tc02, tc03, tc04, tc05];
