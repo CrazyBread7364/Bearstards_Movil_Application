@@ -79,7 +79,8 @@ class _ToonPill extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
     decoration: BoxDecoration(
-      color: color,
+      // Translucent fills would let the hard shadow show through the pill.
+      color: Color.alphaBlend(color, Palette.paper),
       border: Border.all(color: Palette.ink, width: 2.5),
       borderRadius: BorderRadius.circular(999),
       boxShadow: const [BoxShadow(color: Palette.ink, offset: Offset(2, 3))],
