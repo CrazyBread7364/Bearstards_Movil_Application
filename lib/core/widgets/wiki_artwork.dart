@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
+import 'wiggle.dart';
 
 class WikiArtwork extends StatelessWidget {
   const WikiArtwork(
@@ -77,7 +78,9 @@ class ArtworkStage extends StatelessWidget {
         painter: _FacetPainter(color),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: WikiArtwork(asset, height: height, label: label),
+          child: Wiggle(
+            child: WikiArtwork(asset, height: height, label: label),
+          ),
         ),
       ),
     ),
