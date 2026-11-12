@@ -180,4 +180,31 @@ void main() {
     expect(find.textContaining('resta 50 puntos'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
+
+  suiteWidgetTest(tc16, (tester) async {
+    await launchApp(tester);
+
+    await openChapter(tester, 'Explorar Arsenal');
+    await tester.scrollUntilVisible(
+      find.text('Cada objetivo cuenta'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    for (final (points, label) in [
+      ('+200', 'Rival con aguja'),
+      ('+350', 'Rival con aguja y sigilo'),
+      ('+400', 'Rival con dardos'),
+      ('−50', 'Oso NPC'),
+    ]) {
+      expect(find.text(points), findsOneWidget, reason: points);
+      expect(find.text(label), findsOneWidget, reason: label);
+      expect(
+        find.bySemanticsLabel('$label: $points puntos'),
+        findsOneWidget,
+        reason: 'Etiqueta de accesibilidad de $points',
+      );
+    }
+    expect(tester.takeException(), isNull);
+  });
 }

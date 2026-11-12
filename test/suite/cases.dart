@@ -274,6 +274,24 @@ const tc15 = TestCase(
       'golpear a un NPC resta 50 puntos.',
 );
 
+const tc16 = TestCase(
+  id: 'TC-16',
+  title: 'Arsenal muestra la puntuación',
+  priority: Priority.alta,
+  requirements: ['RF-05', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Arsenal" y desplazamiento hasta "Cada objetivo cuenta"',
+  steps: [
+    'Tocar la tarjeta "Explorar Arsenal".',
+    'Desplazar hasta el encabezado "Cada objetivo cuenta".',
+    'Leer los cuatro valores de puntuación.',
+  ],
+  expected:
+      'Se muestran +200 por eliminar al rival con aguja, +350 con sigilo, '
+      '+400 con dardos y −50 por golpear a un NPC, igual que en el '
+      'Portafolio funcional.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -291,4 +309,5 @@ const suiteCases = [
   tc13,
   tc14,
   tc15,
+  tc16,
 ];

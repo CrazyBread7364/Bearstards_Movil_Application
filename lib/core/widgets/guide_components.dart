@@ -207,3 +207,53 @@ class NumberedRule extends StatelessWidget {
     ),
   );
 }
+
+/// Big score value over a colored tile, like the points cards of the web.
+class ScoreTile extends StatelessWidget {
+  const ScoreTile({
+    super.key,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+  final String value, label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    label: '$label: $value puntos',
+    excludeSemantics: true,
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: Palette.ink, width: 2.5),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(color: Palette.ink, offset: Offset(3, 4))],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Large text sizes shrink the value instead of wrapping its digits.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium!
+                .copyWith(fontSize: 13, height: 1.2),
+          ),
+        ],
+      ),
+    ),
+  );
+}
