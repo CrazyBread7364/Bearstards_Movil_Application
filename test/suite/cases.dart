@@ -326,6 +326,39 @@ const tc18 = TestCase(
       'después, y la portada muestra sus cinco capítulos.',
 );
 
+const tc19 = TestCase(
+  id: 'TC-19',
+  title: 'La cinta de la portada se puede pausar',
+  priority: Priority.media,
+  requirements: ['RF-01', 'RF-10'],
+  preconditions: 'App iniciada en la portada con las animaciones activas',
+  input: 'Toque en "Pausar la cinta de texto" y luego en "Reanudar"',
+  steps: [
+    'Iniciar la app con las animaciones activas.',
+    'Tocar el botón "Pausar la cinta de texto".',
+    'Tocar el botón "Reanudar la cinta de texto".',
+  ],
+  expected:
+      'La cinta se detiene al pausar y el botón pasa a "Reanudar la cinta de '
+      'texto"; al reanudar vuelve a moverse y el botón vuelve a "Pausar".',
+);
+
+const tc20 = TestCase(
+  id: 'TC-20',
+  title: 'Sin animaciones la portada no mueve la cinta',
+  priority: Priority.media,
+  requirements: ['RF-10'],
+  preconditions:
+      'App iniciada con la opción del sistema de reducir animaciones',
+  input: 'Ninguna: solo se observa la portada',
+  steps: [
+    'Activar la reducción de animaciones del sistema.',
+    'Iniciar la app y observar la portada.',
+  ],
+  expected:
+      'La cinta de texto permanece quieta y no se muestra el botón de pausa.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -346,4 +379,6 @@ const suiteCases = [
   tc16,
   tc17,
   tc18,
+  tc19,
+  tc20,
 ];
