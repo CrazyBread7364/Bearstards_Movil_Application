@@ -27,6 +27,31 @@ class CharactersScreen extends StatelessWidget {
         icon: Icons.groups_outlined,
         color: Palette.cyan,
       ),
+      const GuideHeading('Tres reglas.', eyebrow: 'Cómo se juega', light: true),
+      const NumberedRule(
+        number: 1,
+        title: 'Encuentra a tu rival',
+        body:
+            'Entre los NPC hay un oso controlado por otra persona. Observa '
+            'quién camina distinto.',
+        color: Palette.cyan,
+      ),
+      const NumberedRule(
+        number: 2,
+        title: 'Equípate sin llamar la atención',
+        body:
+            'Recoge tu arma por los pasillos. Portarla te delata, porque los '
+            'NPC nunca llevan armas.',
+        color: Palette.mint,
+      ),
+      const NumberedRule(
+        number: 3,
+        title: 'Elimina al correcto',
+        body:
+            'Un golpe a la cabeza elimina al instante. Golpear a un NPC resta '
+            '50 puntos.',
+        color: Palette.pink,
+      ),
       StitchedCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

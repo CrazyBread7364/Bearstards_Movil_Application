@@ -162,4 +162,22 @@ void main() {
     expect(find.byType(ObjectsScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  suiteWidgetTest(tc15, (tester) async {
+    await launchApp(tester);
+
+    await openChapter(tester, 'Explorar Personajes');
+    await tester.scrollUntilVisible(
+      find.text('Elimina al correcto'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    expect(find.text('Tres reglas.'), findsOneWidget);
+    expect(find.text('Encuentra a tu rival'), findsOneWidget);
+    expect(find.text('Equípate sin llamar la atención'), findsOneWidget);
+    expect(find.text('Elimina al correcto'), findsOneWidget);
+    expect(find.textContaining('resta 50 puntos'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
 }

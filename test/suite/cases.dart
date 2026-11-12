@@ -256,6 +256,24 @@ const tc14 = TestCase(
       'La tarjeta Objetos abre la pantalla de Objetos.',
 );
 
+const tc15 = TestCase(
+  id: 'TC-15',
+  title: 'Personajes muestra las tres reglas',
+  priority: Priority.alta,
+  requirements: ['RF-02', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Personajes" y desplazamiento hasta las reglas',
+  steps: [
+    'Tocar la tarjeta "Explorar Personajes".',
+    'Desplazar hasta el encabezado "Tres reglas.".',
+    'Leer las tres reglas numeradas.',
+  ],
+  expected:
+      'Aparecen tres reglas numeradas: encontrar al rival, equiparse sin '
+      'llamar la atención y eliminar al correcto. La tercera indica que '
+      'golpear a un NPC resta 50 puntos.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -272,4 +290,5 @@ const suiteCases = [
   tc12,
   tc13,
   tc14,
+  tc15,
 ];

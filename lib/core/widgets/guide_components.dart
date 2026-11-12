@@ -158,3 +158,52 @@ class GuideRule extends StatelessWidget {
     ),
   );
 }
+
+/// Rule card with a numbered badge, like the numbered rules of the web.
+class NumberedRule extends StatelessWidget {
+  const NumberedRule({
+    super.key,
+    required this.number,
+    required this.title,
+    required this.body,
+    this.color = Palette.cyan,
+  });
+  final int number;
+  final String title, body;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => StitchedCard(
+    padding: const EdgeInsets.all(16),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 46,
+          height: 46,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(color: Palette.ink, width: 2.5),
+            boxShadow: const [
+              BoxShadow(color: Palette.ink, offset: Offset(2, 3)),
+            ],
+          ),
+          child: Text('$number', style: Theme.of(context).textTheme.titleLarge),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 4),
+              Text(body, style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
