@@ -309,6 +309,23 @@ const tc17 = TestCase(
       'muestra su periodo y no aparecen desbordes.',
 );
 
+const tc18 = TestCase(
+  id: 'TC-18',
+  title: 'La portada soporta un primer fotograma sin tamaño',
+  priority: Priority.alta,
+  requirements: ['RF-09'],
+  preconditions: 'Pantalla con ancho cero, como el primer fotograma de Android',
+  input: 'Inicio de la app con una superficie de 0×0 y luego de 390×844',
+  steps: [
+    'Iniciar la app con una superficie sin tamaño.',
+    'Ampliar la superficie a 390×844 como lo hace el sistema.',
+    'Comprobar que la portada se muestra.',
+  ],
+  expected:
+      'No se produce ninguna excepción de diseño ni con el tamaño cero ni '
+      'después, y la portada muestra sus cinco capítulos.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -328,4 +345,5 @@ const suiteCases = [
   tc15,
   tc16,
   tc17,
+  tc18,
 ];

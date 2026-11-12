@@ -1,3 +1,4 @@
+import 'package:bearstards_movil_application/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -46,6 +47,28 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(period), findsOneWidget, reason: label);
       expect(tester.takeException(), isNull, reason: label);
+    }
+  });
+
+  suiteWidgetTest(tc18, (tester) async {
+    tester.view.physicalSize = Size.zero;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(const BearstardsWikiApp());
+    expect(tester.takeException(), isNull, reason: 'Superficie 0×0');
+
+    tester.view.physicalSize = const Size(390, 844);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull, reason: 'Tras ampliar');
+    for (final chapter in [
+      'Personajes',
+      'Sigilo',
+      'Objetos',
+      'Arsenal',
+      'La Juguetería',
+    ]) {
+      expect(find.bySemanticsLabel('Explorar $chapter'), findsOneWidget);
     }
   });
 }

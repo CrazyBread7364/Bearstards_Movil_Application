@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../../app/navigation/wiki_routes.dart';
@@ -24,8 +26,12 @@ class HomeScreen extends StatelessWidget {
                 360.0,
               );
               final scale = MediaQuery.textScalerOf(context).scale(1);
-              final tileHeight =
-                  (constraints.maxWidth - 52) / 2 * 1.06 + (scale - 1) * 42;
+              // Android can lay out a first frame with zero width; a negative
+              // height would assert, so the tile height never goes below zero.
+              final tileHeight = max(
+                0.0,
+                (constraints.maxWidth - 52) / 2 * 1.06 + (scale - 1) * 42,
+              );
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
