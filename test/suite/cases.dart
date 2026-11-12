@@ -292,6 +292,23 @@ const tc16 = TestCase(
       'Portafolio funcional.',
 );
 
+const tc17 = TestCase(
+  id: 'TC-17',
+  title: 'Selector de fases con texto al 180 %',
+  priority: Priority.media,
+  requirements: ['RF-06', 'RF-09'],
+  preconditions: 'Pantalla de 390×844 y escala de texto al 180 %',
+  input: 'Toque en las fases 1, 2 y 3 del selector de La Juguetería',
+  steps: [
+    'Iniciar la app con el texto ampliado al 180 %.',
+    'Abrir La Juguetería y desplazar hasta el selector de fases.',
+    'Tocar cada fase y leer su descripción.',
+  ],
+  expected:
+      'Las tres fases se pueden tocar con su etiqueta "Fase N: …", cada una '
+      'muestra su periodo y no aparecen desbordes.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -310,4 +327,5 @@ const suiteCases = [
   tc14,
   tc15,
   tc16,
+  tc17,
 ];
