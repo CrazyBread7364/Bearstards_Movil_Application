@@ -89,8 +89,7 @@ void main() {
   suiteWidgetTest(tc05, (tester) async {
     await launchApp(tester);
 
-    await tester.tap(find.bySemanticsLabel('Explorar La Juguetería'));
-    await tester.pumpAndSettle();
+    await openChapter(tester, 'Explorar La Juguetería');
     await tester.scrollUntilVisible(
       find.bySemanticsLabel('Fase 2: Mercancía nueva'),
       180,
@@ -138,6 +137,73 @@ void main() {
       await tester.tap(find.byTooltip('Volver'));
       await tester.pumpAndSettle();
       expect(find.byType(ObjectsScreen), findsOneWidget);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc14, (tester) async {
+    await launchApp(tester);
+
+    for (final chapter in [
+      'Personajes',
+      'Sigilo',
+      'Objetos',
+      'Arsenal',
+      'La Juguetería',
+    ]) {
+      expect(
+        find.bySemanticsLabel('Explorar $chapter'),
+        findsOneWidget,
+        reason: chapter,
+      );
+    }
+
+    await openChapter(tester, 'Explorar Objetos');
+    expect(find.byType(ObjectsScreen), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc15, (tester) async {
+    await launchApp(tester);
+
+    await openChapter(tester, 'Explorar Personajes');
+    await tester.scrollUntilVisible(
+      find.text('Elimina al correcto'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    expect(find.text('Tres reglas.'), findsOneWidget);
+    expect(find.text('Encuentra a tu rival'), findsOneWidget);
+    expect(find.text('Equípate sin llamar la atención'), findsOneWidget);
+    expect(find.text('Elimina al correcto'), findsOneWidget);
+    expect(find.textContaining('resta 50 puntos'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
+  suiteWidgetTest(tc16, (tester) async {
+    await launchApp(tester);
+
+    await openChapter(tester, 'Explorar Arsenal');
+    await tester.scrollUntilVisible(
+      find.text('Cada objetivo cuenta'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    for (final (points, label) in [
+      ('+200', 'Rival con aguja'),
+      ('+350', 'Rival con aguja y sigilo'),
+      ('+400', 'Rival con dardos'),
+      ('−50', 'Oso NPC'),
+    ]) {
+      expect(find.text(points), findsOneWidget, reason: points);
+      expect(find.text(label), findsOneWidget, reason: label);
+      expect(
+        find.bySemanticsLabel('$label: $points puntos'),
+        findsOneWidget,
+        reason: 'Etiqueta de accesibilidad de $points',
+      );
     }
     expect(tester.takeException(), isNull);
   });

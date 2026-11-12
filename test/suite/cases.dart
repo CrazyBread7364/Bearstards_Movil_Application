@@ -83,7 +83,7 @@ const tc05 = TestCase(
       'Toque en "Explorar La Juguetería" y luego en las fases 2, 3 y 1 del '
       'selector',
   steps: [
-    'Tocar la tarjeta "Explorar La Juguetería".',
+    'Desplazar la portada hasta "Explorar La Juguetería" y tocar la tarjeta.',
     'Desplazar hasta el selector de fases y leer la fase inicial.',
     'Tocar "Fase 2: Mercancía nueva" y leer su descripción.',
     'Tocar "Fase 3: Remate final" y leer su descripción.',
@@ -240,6 +240,75 @@ const tc13 = TestCase(
       'sin datos se rechaza por los cuatro campos.',
 );
 
+const tc14 = TestCase(
+  id: 'TC-14',
+  title: 'La portada enlaza los cinco capítulos',
+  priority: Priority.alta,
+  requirements: ['RF-01', 'RF-04'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Las tarjetas "Explorar …" y un toque en "Explorar Objetos"',
+  steps: [
+    'Buscar en la portada las cinco tarjetas de capítulo.',
+    'Desplazar hasta "Explorar Objetos" y tocar la tarjeta.',
+  ],
+  expected:
+      'La portada ofrece Personajes, Sigilo, Objetos, Arsenal y La Juguetería. '
+      'La tarjeta Objetos abre la pantalla de Objetos.',
+);
+
+const tc15 = TestCase(
+  id: 'TC-15',
+  title: 'Personajes muestra las tres reglas',
+  priority: Priority.alta,
+  requirements: ['RF-02', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Personajes" y desplazamiento hasta las reglas',
+  steps: [
+    'Tocar la tarjeta "Explorar Personajes".',
+    'Desplazar hasta el encabezado "Tres reglas.".',
+    'Leer las tres reglas numeradas.',
+  ],
+  expected:
+      'Aparecen tres reglas numeradas: encontrar al rival, equiparse sin '
+      'llamar la atención y eliminar al correcto. La tercera indica que '
+      'golpear a un NPC resta 50 puntos.',
+);
+
+const tc16 = TestCase(
+  id: 'TC-16',
+  title: 'Arsenal muestra la puntuación',
+  priority: Priority.alta,
+  requirements: ['RF-05', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Arsenal" y desplazamiento hasta "Cada objetivo cuenta"',
+  steps: [
+    'Tocar la tarjeta "Explorar Arsenal".',
+    'Desplazar hasta el encabezado "Cada objetivo cuenta".',
+    'Leer los cuatro valores de puntuación.',
+  ],
+  expected:
+      'Se muestran +200 por eliminar al rival con aguja, +350 con sigilo, '
+      '+400 con dardos y −50 por golpear a un NPC, igual que en el '
+      'Portafolio funcional.',
+);
+
+const tc17 = TestCase(
+  id: 'TC-17',
+  title: 'Selector de fases con texto al 180 %',
+  priority: Priority.media,
+  requirements: ['RF-06', 'RF-09'],
+  preconditions: 'Pantalla de 390×844 y escala de texto al 180 %',
+  input: 'Toque en las fases 1, 2 y 3 del selector de La Juguetería',
+  steps: [
+    'Iniciar la app con el texto ampliado al 180 %.',
+    'Abrir La Juguetería y desplazar hasta el selector de fases.',
+    'Tocar cada fase y leer su descripción.',
+  ],
+  expected:
+      'Las tres fases se pueden tocar con su etiqueta "Fase N: …", cada una '
+      'muestra su periodo y no aparecen desbordes.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -255,4 +324,8 @@ const suiteCases = [
   tc11,
   tc12,
   tc13,
+  tc14,
+  tc15,
+  tc16,
+  tc17,
 ];
