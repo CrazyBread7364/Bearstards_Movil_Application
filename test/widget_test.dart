@@ -21,7 +21,11 @@ Future<void> launch(
   addTearDown(tester.view.resetDevicePixelRatio);
   await tester.pumpWidget(
     MediaQuery(
-      data: MediaQueryData(size: size, textScaler: TextScaler.linear(scale)),
+      data: MediaQueryData(
+        size: size,
+        textScaler: TextScaler.linear(scale),
+        disableAnimations: true,
+      ),
       child: const BearstardsWikiApp(),
     ),
   );

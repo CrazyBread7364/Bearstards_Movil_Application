@@ -29,7 +29,13 @@ void main() {
     await icons.load();
     final boundaryKey = GlobalKey();
     await tester.pumpWidget(
-      RepaintBoundary(key: boundaryKey, child: const BearstardsWikiApp()),
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: RepaintBoundary(
+          key: boundaryKey,
+          child: const BearstardsWikiApp(),
+        ),
+      ),
     );
     await tester.runAsync(() async {
       final context = tester.element(find.byType(BearstardsWikiApp));
