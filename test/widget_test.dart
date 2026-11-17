@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'suite/support/app_harness.dart' show loadWikiFonts, openChapter;
+import 'support/results_fakes.dart';
+
 import 'package:bearstards_movil_application/app/app.dart';
 import 'package:bearstards_movil_application/app/navigation/wiki_routes.dart';
 import 'package:bearstards_movil_application/features/wiki/domain/models/wiki_entry.dart';
@@ -19,8 +22,14 @@ Future<void> launch(
   addTearDown(tester.view.resetDevicePixelRatio);
   await tester.pumpWidget(
     MediaQuery(
-      data: MediaQueryData(size: size, textScaler: TextScaler.linear(scale)),
-      child: const BearstardsWikiApp(),
+      data: MediaQueryData(
+        size: size,
+        textScaler: TextScaler.linear(scale),
+        disableAnimations: true,
+      ),
+      child: BearstardsWikiApp(
+        resultsRepository: FakeResultsRepository.always(const []),
+      ),
     ),
   );
   await tester.pumpAndSettle();
@@ -32,12 +41,7 @@ Future<void> launch(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() async {
-    final fonts = FontLoader('Vera')
-      ..addFont(rootBundle.load('assets/fonts/Vera.ttf'))
-      ..addFont(rootBundle.load('assets/fonts/VeraBd.ttf'));
-    await fonts.load();
-  });
+  setUpAll(loadWikiFonts);
   testWidgets('Personajes has its own route and does not open Sigilo', (
     tester,
   ) async {
@@ -93,8 +97,7 @@ void main() {
     'all phases expose their actual change, without fixed 15-minute intervals',
     (tester) async {
       await launch(tester);
-      await tester.tap(find.bySemanticsLabel('Explorar La Juguetería'));
-      await tester.pumpAndSettle();
+      await openChapter(tester, 'Explorar La Juguetería');
       await tester.scrollUntilVisible(
         find.bySemanticsLabel('Fase 2: Mercancía nueva'),
         180,

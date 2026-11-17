@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../../app/navigation/wiki_routes.dart';
 import '../../../../core/assets/wiki_assets.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/cream_section.dart';
+import '../../../../core/widgets/guide_components.dart';
 import '../../../../core/widgets/stitched_card.dart';
+import '../../../../core/widgets/text_ticker.dart';
 import '../../../../core/widgets/wiki_artwork.dart';
 import '../widgets/guide_scaffold.dart';
 
@@ -22,8 +27,12 @@ class HomeScreen extends StatelessWidget {
                 360.0,
               );
               final scale = MediaQuery.textScalerOf(context).scale(1);
-              final tileHeight =
-                  (constraints.maxWidth - 52) / 2 * 1.06 + (scale - 1) * 42;
+              // Android can lay out a first frame with zero width; a negative
+              // height would assert, so the tile height never goes below zero.
+              final tileHeight = max(
+                0.0,
+                (constraints.maxWidth - 52) / 2 * 1.06 + (scale - 1) * 42,
+              );
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -36,77 +45,24 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(18, 4, 18, 12),
-                    sliver: SliverToBoxAdapter(
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 5,
-                            height: 14,
-                            decoration: BoxDecoration(
-                              color: Palette.yellow,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'EXPLORA LA GUÍA',
-                            style: Theme.of(context).textTheme.labelSmall!
-                                .copyWith(
-                                  color: Palette.paper,
-                                  letterSpacing: 1.6,
-                                ),
-                          ),
-                        ],
-                      ),
+                  const SliverToBoxAdapter(
+                    child: TextTicker(
+                      phrases: [
+                        'Sigilo',
+                        'Engaño',
+                        'Peluches en guerra',
+                        '1 contra 1',
+                        'Solo uno será vendido',
+                      ],
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(18, 0, 22, 22),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisExtent: tileHeight,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 14,
-                      ),
-                      delegate: SliverChildListDelegate.fixed(const [
-                        _HomeCategory(
-                          'Personajes',
-                          WikiAssets.homeCharacters,
-                          Palette.pink,
-                          WikiSection.characters,
-                        ),
-                        _HomeCategory(
-                          'Sigilo',
-                          WikiAssets.homeStealth,
-                          Palette.yellow,
-                          WikiSection.stealth,
-                        ),
-                        _HomeCategory(
-                          'Arsenal',
-                          WikiAssets.dartBlaster,
-                          Palette.cyan,
-                          WikiSection.arsenal,
-                        ),
-                        _HomeCategory(
-                          'La Juguetería',
-                          WikiAssets.map,
-                          Palette.lavender,
-                          WikiSection.map,
-                        ),
-                      ]),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                      child: Text(
-                        'Observa. Confúndete. Conoce La Juguetería.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodySmall!
-                            .copyWith(color: Palette.cream),
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: CreamSection(
+                      padding: const EdgeInsets.fromLTRB(20, 44, 20, 28),
+                      child: _Chapters(
+                        tileHeight: tileHeight,
+                        mapHeight: tileHeight * .8,
                       ),
                     ),
                   ),
@@ -117,6 +73,92 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     ),
+  );
+}
+
+/// "Explora la guía": the chapter tiles over the cream section.
+class _Chapters extends StatelessWidget {
+  const _Chapters({required this.tileHeight, required this.mapHeight});
+  final double tileHeight, mapHeight;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const GuideHeading('Elige tu capítulo.', eyebrow: 'Explora la guía'),
+      const SizedBox(height: 18),
+      // Rows instead of a shrink-wrapped grid: SliverFillRemaining measures
+      // its child, and shrink-wrapped viewports cannot be measured.
+      for (final pair in const [
+        (
+          _HomeCategory(
+            'Personajes',
+            WikiAssets.homeCharacters,
+            Palette.pink,
+            WikiSection.characters,
+          ),
+          _HomeCategory(
+            'Sigilo',
+            WikiAssets.homeStealth,
+            Palette.yellow,
+            WikiSection.stealth,
+          ),
+        ),
+        (
+          _HomeCategory(
+            'Objetos',
+            WikiAssets.helmet,
+            Palette.mint,
+            WikiSection.objects,
+          ),
+          _HomeCategory(
+            'Arsenal',
+            WikiAssets.dartBlaster,
+            Palette.cyan,
+            WikiSection.arsenal,
+          ),
+        ),
+      ]) ...[
+        SizedBox(
+          height: tileHeight,
+          child: Row(
+            children: [
+              Expanded(child: pair.$1),
+              const SizedBox(width: 12),
+              Expanded(child: pair.$2),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+      ],
+      SizedBox(
+        height: mapHeight,
+        child: const _HomeCategory(
+          'La Juguetería',
+          WikiAssets.map,
+          Palette.lavender,
+          WikiSection.map,
+        ),
+      ),
+      const SizedBox(height: 14),
+      SizedBox(
+        height: mapHeight * .75,
+        child: const _HomeCategory(
+          'Resultados globales',
+          WikiAssets.health,
+          Palette.orange,
+          WikiSection.scores,
+        ),
+      ),
+      const SizedBox(height: 22),
+      Center(
+        child: Text(
+          'Observa. Confúndete. Conoce La Juguetería.',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    ],
   );
 }
 
@@ -169,7 +211,9 @@ class _HomeCategory extends StatelessWidget {
         Expanded(
           child: WikiArtwork(
             asset,
-            fit: section == WikiSection.map ? BoxFit.cover : BoxFit.contain,
+            fit: section == WikiSection.map || section == WikiSection.scores
+                ? BoxFit.cover
+                : BoxFit.contain,
           ),
         ),
         const SizedBox(height: 5),

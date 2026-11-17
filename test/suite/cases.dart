@@ -83,7 +83,7 @@ const tc05 = TestCase(
       'Toque en "Explorar La Juguetería" y luego en las fases 2, 3 y 1 del '
       'selector',
   steps: [
-    'Tocar la tarjeta "Explorar La Juguetería".',
+    'Desplazar la portada hasta "Explorar La Juguetería" y tocar la tarjeta.',
     'Desplazar hasta el selector de fases y leer la fase inicial.',
     'Tocar "Fase 2: Mercancía nueva" y leer su descripción.',
     'Tocar "Fase 3: Remate final" y leer su descripción.',
@@ -122,7 +122,7 @@ const tc07 = TestCase(
   priority: Priority.alta,
   requirements: ['RF-09'],
   preconditions: 'Pantalla de 320×568 y escala de texto al 100 %',
-  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  input: 'Recorrido por la portada, los seis capítulos y las cuatro fichas',
   steps: [
     'Iniciar la app en una pantalla de 320×568.',
     'Abrir cada capítulo y desplazar hasta el final.',
@@ -139,7 +139,7 @@ const tc08 = TestCase(
   priority: Priority.alta,
   requirements: ['RF-09'],
   preconditions: 'Pantalla de 390×844 y escala de texto al 180 %',
-  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  input: 'Recorrido por la portada, los seis capítulos y las cuatro fichas',
   steps: [
     'Iniciar la app con el texto ampliado al 180 %.',
     'Abrir cada capítulo y desplazar hasta el final.',
@@ -156,7 +156,7 @@ const tc09 = TestCase(
   priority: Priority.media,
   requirements: ['RF-09'],
   preconditions: 'Pantalla en horizontal de 844×390 y escala de texto al 100 %',
-  input: 'Recorrido por la portada, los cinco capítulos y las cuatro fichas',
+  input: 'Recorrido por la portada, los seis capítulos y las cuatro fichas',
   steps: [
     'Iniciar la app con el teléfono en horizontal.',
     'Abrir cada capítulo y desplazar hasta el final.',
@@ -240,6 +240,276 @@ const tc13 = TestCase(
       'sin datos se rechaza por los cuatro campos.',
 );
 
+const tc14 = TestCase(
+  id: 'TC-14',
+  title: 'La portada enlaza los seis capítulos',
+  priority: Priority.alta,
+  requirements: ['RF-01', 'RF-04'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Las tarjetas "Explorar …" y un toque en "Explorar Objetos"',
+  steps: [
+    'Buscar en la portada las seis tarjetas de capítulo.',
+    'Desplazar hasta "Explorar Objetos" y tocar la tarjeta.',
+  ],
+  expected:
+      'La portada ofrece Personajes, Sigilo, Objetos, Arsenal, La Juguetería y '
+      'Resultados globales. '
+      'La tarjeta Objetos abre la pantalla de Objetos.',
+);
+
+const tc15 = TestCase(
+  id: 'TC-15',
+  title: 'Personajes muestra las tres reglas',
+  priority: Priority.alta,
+  requirements: ['RF-02', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Personajes" y desplazamiento hasta las reglas',
+  steps: [
+    'Tocar la tarjeta "Explorar Personajes".',
+    'Desplazar hasta el encabezado "Tres reglas.".',
+    'Leer las tres reglas numeradas.',
+  ],
+  expected:
+      'Aparecen tres reglas numeradas: encontrar al rival, equiparse sin '
+      'llamar la atención y eliminar al correcto. La tercera indica que '
+      'golpear a un NPC resta 50 puntos.',
+);
+
+const tc16 = TestCase(
+  id: 'TC-16',
+  title: 'Arsenal muestra la puntuación',
+  priority: Priority.alta,
+  requirements: ['RF-05', 'RF-07'],
+  preconditions: 'App iniciada en la portada, pantalla de 390×844',
+  input: 'Toque en "Explorar Arsenal" y desplazamiento hasta "Cada objetivo cuenta"',
+  steps: [
+    'Tocar la tarjeta "Explorar Arsenal".',
+    'Desplazar hasta el encabezado "Cada objetivo cuenta".',
+    'Leer los cuatro valores de puntuación.',
+  ],
+  expected:
+      'Se muestran +200 por eliminar al rival con aguja, +350 con sigilo, '
+      '+400 con dardos y −50 por golpear a un NPC, igual que en el '
+      'Portafolio funcional.',
+);
+
+const tc17 = TestCase(
+  id: 'TC-17',
+  title: 'Selector de fases con texto al 180 %',
+  priority: Priority.media,
+  requirements: ['RF-06', 'RF-09'],
+  preconditions: 'Pantalla de 390×844 y escala de texto al 180 %',
+  input: 'Toque en las fases 1, 2 y 3 del selector de La Juguetería',
+  steps: [
+    'Iniciar la app con el texto ampliado al 180 %.',
+    'Abrir La Juguetería y desplazar hasta el selector de fases.',
+    'Tocar cada fase y leer su descripción.',
+  ],
+  expected:
+      'Las tres fases se pueden tocar con su etiqueta "Fase N: …", cada una '
+      'muestra su periodo y no aparecen desbordes.',
+);
+
+const tc18 = TestCase(
+  id: 'TC-18',
+  title: 'La portada soporta un primer fotograma sin tamaño',
+  priority: Priority.alta,
+  requirements: ['RF-09'],
+  preconditions: 'Pantalla con ancho cero, como el primer fotograma de Android',
+  input: 'Inicio de la app con una superficie de 0×0 y luego de 390×844',
+  steps: [
+    'Iniciar la app con una superficie sin tamaño.',
+    'Ampliar la superficie a 390×844 como lo hace el sistema.',
+    'Comprobar que la portada se muestra.',
+  ],
+  expected:
+      'No se produce ninguna excepción de diseño ni con el tamaño cero ni '
+      'después, y la portada muestra sus seis capítulos.',
+);
+
+const tc19 = TestCase(
+  id: 'TC-19',
+  title: 'La cinta de la portada se puede pausar',
+  priority: Priority.media,
+  requirements: ['RF-01', 'RF-10'],
+  preconditions: 'App iniciada en la portada con las animaciones activas',
+  input: 'Toque en "Pausar la cinta de texto" y luego en "Reanudar"',
+  steps: [
+    'Iniciar la app con las animaciones activas.',
+    'Tocar el botón "Pausar la cinta de texto".',
+    'Tocar el botón "Reanudar la cinta de texto".',
+  ],
+  expected:
+      'La cinta se detiene al pausar y el botón pasa a "Reanudar la cinta de '
+      'texto"; al reanudar vuelve a moverse y el botón vuelve a "Pausar".',
+);
+
+const tc20 = TestCase(
+  id: 'TC-20',
+  title: 'Sin animaciones la portada no mueve la cinta',
+  priority: Priority.media,
+  requirements: ['RF-10'],
+  preconditions:
+      'App iniciada con la opción del sistema de reducir animaciones',
+  input: 'Ninguna: solo se observa la portada',
+  steps: [
+    'Activar la reducción de animaciones del sistema.',
+    'Iniciar la app y observar la portada.',
+  ],
+  expected:
+      'La cinta de texto permanece quieta y no se muestra el botón de pausa.',
+);
+
+const tc21 = TestCase(
+  id: 'TC-21',
+  title: 'La portada abre Resultados globales',
+  priority: Priority.alta,
+  requirements: ['RF-12', 'RF-01'],
+  preconditions:
+      'App iniciada en la portada, pantalla de 390×844, API con datos',
+  input: 'Toque en "Explorar Resultados globales"',
+  steps: [
+    'Desplazar la portada hasta "Explorar Resultados globales" y tocar la tarjeta.',
+    'Verificar la pantalla que se abre.',
+    'Tocar "Volver".',
+  ],
+  expected:
+      'Se abre la pantalla Resultados con el encabezado "Resultados globales" '
+      'y Volver regresa a la portada.',
+);
+
+const tc22 = TestCase(
+  id: 'TC-22',
+  title: 'El ranking muestra podio y lista en el orden del servidor',
+  priority: Priority.alta,
+  requirements: ['RF-12', 'RF-13'],
+  preconditions: 'La API responde con cinco jugadores',
+  input: 'Ranking: memo 600, CarlOso 500, AngelOso 200, celaya 0, memo2 −150',
+  steps: [
+    'Abrir Resultados globales.',
+    'Leer los tres primeros puestos.',
+    'Desplazar y leer los puestos 4 y 5.',
+  ],
+  expected:
+      'Los puestos 1 a 3 aparecen en el podio y el 4 y el 5 en la lista, con '
+      'nombre, puntos, partidas y porcentaje de victorias, en el mismo orden '
+      'del servidor. Los puntos negativos llevan el signo "−".',
+);
+
+const tc23 = TestCase(
+  id: 'TC-23',
+  title: 'Un jugador sin partidas muestra un guion',
+  priority: Priority.media,
+  requirements: ['RF-13'],
+  preconditions: 'La API incluye un jugador con 0 partidas',
+  input: 'Jugador "celaya" con 0 partidas y 0 puntos',
+  steps: [
+    'Abrir Resultados globales.',
+    'Desplazar hasta el jugador sin partidas.',
+  ],
+  expected:
+      'Su fila dice "Sin partidas · — victorias": no calcula un porcentaje '
+      'con una división entre cero.',
+);
+
+const tc24 = TestCase(
+  id: 'TC-24',
+  title: 'Un ranking vacío explica que no hay partidas',
+  priority: Priority.media,
+  requirements: ['RF-12', 'RF-14'],
+  preconditions: 'La API responde con una lista vacía',
+  input: 'Respuesta 200 con []',
+  steps: ['Abrir Resultados globales.'],
+  expected:
+      'Aparece "Aún no hay partidas registradas" y no el mensaje de error.',
+);
+
+const tc25 = TestCase(
+  id: 'TC-25',
+  title: 'Sin conexión se muestra el error y Reintentar lo recupera',
+  priority: Priority.alta,
+  requirements: ['RF-14'],
+  preconditions:
+      'La primera petición falla por falta de conexión y la segunda funciona',
+  input: 'Toque en "Reintentar"',
+  steps: [
+    'Abrir Resultados globales sin conexión.',
+    'Leer el mensaje.',
+    'Tocar "Reintentar" con la conexión ya disponible.',
+  ],
+  expected:
+      'Se muestra "No se pudieron cargar los resultados" con un mensaje que '
+      'pide revisar la conexión. Tras Reintentar aparece el ranking y el '
+      'error desaparece.',
+);
+
+const tc26 = TestCase(
+  id: 'TC-26',
+  title: 'Una recarga fallida conserva los datos y avisa',
+  priority: Priority.alta,
+  requirements: ['RF-14'],
+  preconditions: 'El ranking ya se cargó y la siguiente petición falla',
+  input: 'Toque en "Actualizar"',
+  steps: [
+    'Abrir Resultados globales con datos.',
+    'Tocar "Actualizar" cuando el servidor ya no responde.',
+    'Volver al inicio de la pantalla.',
+  ],
+  expected:
+      'Siguen visibles los últimos resultados y aparece el aviso "No se pudo '
+      'actualizar" con su botón Reintentar, sin pantalla de error.',
+);
+
+const tc27 = TestCase(
+  id: 'TC-27',
+  title: 'El cliente lee el contrato del ranking',
+  priority: Priority.alta,
+  requirements: ['RF-12', 'RF-13'],
+  preconditions: 'Respuesta 200 con el formato real de GET /api/ranking/',
+  input: 'JSON con dos jugadores, uno con acento y otro sin partidas',
+  steps: ['Pedir el ranking al cliente HTTP.', 'Comparar los campos leídos.'],
+  expected:
+      'Lee id, nombre, partidas, victorias, derrotas, empates, kills, puntos '
+      'totales y mejor puntuación en el orden recibido, conserva los acentos '
+      'y devuelve una lista que no se puede modificar.',
+);
+
+const tc28 = TestCase(
+  id: 'TC-28',
+  title: 'Los fallos del servidor y los datos inválidos se distinguen',
+  priority: Priority.alta,
+  requirements: ['RF-14'],
+  preconditions: 'Cliente HTTP con respuestas simuladas',
+  input:
+      'Códigos 404, 500 y 503, sin conexión, tiempo agotado, texto que no es '
+      'JSON y un jugador sin puntos',
+  steps: [
+    'Pedir el ranking con cada respuesta simulada.',
+    'Observar el tipo de error recibido.',
+  ],
+  expected:
+      'Los códigos de error, la falta de conexión y el tiempo agotado '
+      'producen "resultados no disponibles"; el JSON inválido o con campos '
+      'faltantes produce "formato inesperado".',
+);
+
+const tc29 = TestCase(
+  id: 'TC-29',
+  title: 'La petición del ranking es pública y no envía credenciales',
+  priority: Priority.alta,
+  requirements: ['RF-15'],
+  preconditions: 'Cliente HTTP con una dirección base de prueba',
+  input: 'GET {base}/ranking/',
+  steps: [
+    'Pedir el ranking.',
+    'Revisar el método, la dirección y los encabezados enviados.',
+  ],
+  expected:
+      'Es un GET a /ranking/ con el encabezado Accept: application/json y '
+      'sin Authorization: la app no maneja contraseñas ni tokens en esta '
+      'pantalla.',
+);
+
 /// Every documented case, in order. The report reads this list.
 const suiteCases = [
   tc01,
@@ -255,4 +525,20 @@ const suiteCases = [
   tc11,
   tc12,
   tc13,
+  tc14,
+  tc15,
+  tc16,
+  tc17,
+  tc18,
+  tc19,
+  tc20,
+  tc21,
+  tc22,
+  tc23,
+  tc24,
+  tc25,
+  tc26,
+  tc27,
+  tc28,
+  tc29,
 ];

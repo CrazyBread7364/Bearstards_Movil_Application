@@ -1,14 +1,24 @@
 import 'package:bearstards_movil_application/app/app.dart';
+import 'package:bearstards_movil_application/features/results/domain/repositories/results_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Loads the bundled font so text metrics match the device.
+import '../../support/results_fakes.dart';
+
+/// Loads the bundled fonts so text metrics match the device.
 Future<void> loadWikiFonts() async {
-  final fonts = FontLoader('Vera')
-    ..addFont(rootBundle.load('assets/fonts/Vera.ttf'))
-    ..addFont(rootBundle.load('assets/fonts/VeraBd.ttf'));
-  await fonts.load();
+  for (final (family, assets) in [
+    ('Vera', ['assets/fonts/Vera.ttf', 'assets/fonts/VeraBd.ttf']),
+    ('LilitaOne', ['assets/fonts/LilitaOne-Regular.ttf']),
+    ('Fredoka', ['assets/fonts/Fredoka.ttf']),
+  ]) {
+    final loader = FontLoader(family);
+    for (final asset in assets) {
+      loader.addFont(rootBundle.load(asset));
+    }
+    await loader.load();
+  }
 }
 
 /// Starts the real app on the home screen with the given screen and text scale.
@@ -16,6 +26,7 @@ Future<void> launchApp(
   WidgetTester tester, {
   Size size = const Size(390, 844),
   double textScale = 1,
+  ResultsRepository? results,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -26,9 +37,25 @@ Future<void> launchApp(
       data: MediaQueryData(
         size: size,
         textScaler: TextScaler.linear(textScale),
+        // The text ribbon moves forever, so tests would never settle.
+        disableAnimations: true,
       ),
-      child: const BearstardsWikiApp(),
+      // Never the real network: tests choose what the results screen gets.
+      child: BearstardsWikiApp(
+        resultsRepository:
+            results ?? FakeResultsRepository.always(sampleRanking),
+      ),
     ),
   );
+  await tester.pumpAndSettle();
+}
+
+/// Scrolls the home screen to a chapter tile (it may be below the fold) and
+/// opens it.
+Future<void> openChapter(WidgetTester tester, String label) async {
+  final tile = find.bySemanticsLabel(label);
+  await tester.ensureVisible(tile);
+  await tester.pumpAndSettle();
+  await tester.tap(tile);
   await tester.pumpAndSettle();
 }

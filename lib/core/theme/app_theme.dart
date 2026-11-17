@@ -15,52 +15,61 @@ abstract final class Palette {
   static const orange = Color(0xffed9148);
 }
 
+/// Display titles use Lilita One; reading text and labels use Fredoka.
+abstract final class AppFonts {
+  static const display = 'LilitaOne';
+  static const body = 'Fredoka';
+}
+
+/// Fredoka is a variable font: the weight is set on its `wght` axis.
+TextStyle _body(
+  double size, {
+  required Color color,
+  int weight = 400,
+  double height = 1.4,
+  double letterSpacing = 0,
+}) => TextStyle(
+  fontFamily: AppFonts.body,
+  fontSize: size,
+  height: height,
+  color: color,
+  letterSpacing: letterSpacing,
+  fontWeight: FontWeight.values[(weight ~/ 100) - 1],
+  fontVariations: [FontVariation('wght', weight.toDouble())],
+);
+
+TextStyle _display(double size, {double height = 1.1}) => TextStyle(
+  fontFamily: AppFonts.display,
+  fontSize: size,
+  height: height,
+  color: Palette.ink,
+  letterSpacing: .2,
+  fontWeight: FontWeight.w400,
+);
+
 abstract final class AppTheme {
   static ThemeData get light => ThemeData(
     useMaterial3: true,
-    fontFamily: 'Vera',
+    fontFamily: AppFonts.body,
     scaffoldBackgroundColor: Palette.night,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Palette.night,
       primary: Palette.ink,
       surface: Palette.paper,
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        fontSize: 28,
-        height: 1.12,
-        fontWeight: FontWeight.w700,
+    textTheme: TextTheme(
+      headlineLarge: _display(32),
+      headlineSmall: _display(26),
+      titleLarge: _display(21, height: 1.15),
+      titleMedium: _body(16, color: Palette.ink, weight: 600, height: 1.25),
+      bodyMedium: _body(14.5, color: Palette.ink, height: 1.5),
+      bodySmall: _body(12.5, color: Palette.muted),
+      labelSmall: _body(
+        11,
         color: Palette.ink,
-        letterSpacing: -.9,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 23,
-        height: 1.15,
-        fontWeight: FontWeight.w700,
-        color: Palette.ink,
-        letterSpacing: -.6,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 19,
-        height: 1.2,
-        fontWeight: FontWeight.w700,
-        color: Palette.ink,
-        letterSpacing: -.4,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 15,
-        height: 1.25,
-        fontWeight: FontWeight.w700,
-        color: Palette.ink,
-      ),
-      bodyMedium: TextStyle(fontSize: 13, height: 1.5, color: Palette.ink),
-      bodySmall: TextStyle(fontSize: 11, height: 1.4, color: Palette.muted),
-      labelSmall: TextStyle(
-        fontSize: 10,
+        weight: 700,
         height: 1.2,
         letterSpacing: 1,
-        fontWeight: FontWeight.w700,
-        color: Palette.ink,
       ),
     ),
     iconTheme: const IconThemeData(color: Palette.ink),

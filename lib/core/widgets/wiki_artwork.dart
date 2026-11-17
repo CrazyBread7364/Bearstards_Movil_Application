@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
+import 'wiggle.dart';
 
 class WikiArtwork extends StatelessWidget {
   const WikiArtwork(
@@ -20,6 +21,11 @@ class WikiArtwork extends StatelessWidget {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
+      // Android lays out a first frame with zero width. Decoding an image for
+      // it creates a 1-pixel texture that the GLES backend cannot upload.
+      if (constraints.hasBoundedWidth && constraints.maxWidth < 1) {
+        return SizedBox(height: height);
+      }
       final density = MediaQuery.devicePixelRatioOf(context);
       final decodeWidth = constraints.hasBoundedWidth
           ? (constraints.maxWidth * density).ceil().clamp(1, 2048)
@@ -72,7 +78,9 @@ class ArtworkStage extends StatelessWidget {
         painter: _FacetPainter(color),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: WikiArtwork(asset, height: height, label: label),
+          child: Wiggle(
+            child: WikiArtwork(asset, height: height, label: label),
+          ),
         ),
       ),
     ),

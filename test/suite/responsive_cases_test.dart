@@ -1,3 +1,4 @@
+import 'package:bearstards_movil_application/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -23,5 +24,56 @@ void main() {
   suiteWidgetTest(tc09, (tester) async {
     await launchApp(tester, size: const Size(844, 390));
     await tourEveryScreen(tester);
+  });
+
+  suiteWidgetTest(tc17, (tester) async {
+    await launchApp(tester, textScale: 1.8);
+    await openChapter(tester, 'Explorar La Juguetería');
+
+    for (final (label, period) in [
+      ('Fase 2: Mercancía nueva', 'Segundo tercio'),
+      ('Fase 3: Remate final', 'Último tercio'),
+      ('Fase 1: Luces apagadas', 'Primer tercio'),
+    ]) {
+      final tile = find.bySemanticsLabel(label);
+      await tester.scrollUntilVisible(
+        tile,
+        180,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.ensureVisible(tile);
+      await tester.pumpAndSettle();
+      await tester.tap(tile);
+      await tester.pumpAndSettle();
+      expect(find.text(period), findsOneWidget, reason: label);
+      expect(tester.takeException(), isNull, reason: label);
+    }
+  });
+
+  suiteWidgetTest(tc18, (tester) async {
+    tester.view.physicalSize = Size.zero;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    // The text ribbon moves forever, so tests would never settle.
+    tester.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    await tester.pumpWidget(const BearstardsWikiApp());
+    expect(tester.takeException(), isNull, reason: 'Superficie 0×0');
+
+    tester.view.physicalSize = const Size(390, 844);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull, reason: 'Tras ampliar');
+    for (final chapter in [
+      'Personajes',
+      'Sigilo',
+      'Objetos',
+      'Arsenal',
+      'La Juguetería',
+      'Resultados globales',
+    ]) {
+      expect(find.bySemanticsLabel('Explorar $chapter'), findsOneWidget);
+    }
   });
 }

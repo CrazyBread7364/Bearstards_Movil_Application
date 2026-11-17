@@ -30,24 +30,40 @@ class ArsenalScreen extends StatelessWidget {
           children: [
             const GuideHeading('Cada objetivo cuenta', eyebrow: 'Puntuación'),
             const SizedBox(height: 10),
-            for (final (label, points) in const [
-              ('Rival con aguja', '+200'),
-              ('Rival con aguja y sigilo', '+350'),
-              ('Rival con dardos', '+400'),
-              ('Oso NPC', '−50'),
+            for (final pair in const [
+              (
+                ScoreTile(
+                  value: '+200',
+                  label: 'Rival con aguja',
+                  color: Palette.yellow,
+                ),
+                ScoreTile(
+                  value: '+350',
+                  label: 'Rival con aguja y sigilo',
+                  color: Palette.mint,
+                ),
+              ),
+              (
+                ScoreTile(
+                  value: '+400',
+                  label: 'Rival con dardos',
+                  color: Palette.cyan,
+                ),
+                ScoreTile(value: '−50', label: 'Oso NPC', color: Palette.pink),
+              ),
             ])
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 7),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(label)),
-                    StatPill(
-                      points,
-                      color: points.startsWith('−')
-                          ? Palette.pink
-                          : Palette.mint,
-                    ),
-                  ],
+                padding: const EdgeInsets.only(bottom: 12),
+                // Two tiles per row, as tall as the taller one.
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: pair.$1),
+                      const SizedBox(width: 12),
+                      Expanded(child: pair.$2),
+                    ],
+                  ),
                 ),
               ),
           ],
