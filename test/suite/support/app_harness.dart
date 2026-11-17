@@ -33,6 +33,8 @@ Future<void> launchApp(
       data: MediaQueryData(
         size: size,
         textScaler: TextScaler.linear(textScale),
+        // The text ribbon moves forever, so tests would never settle.
+        disableAnimations: true,
       ),
       child: const BearstardsWikiApp(),
     ),

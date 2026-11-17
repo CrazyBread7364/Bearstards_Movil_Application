@@ -8,6 +8,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/cream_section.dart';
 import '../../../../core/widgets/guide_components.dart';
 import '../../../../core/widgets/stitched_card.dart';
+import '../../../../core/widgets/text_ticker.dart';
 import '../../../../core/widgets/wiki_artwork.dart';
 import '../widgets/guide_scaffold.dart';
 
@@ -42,6 +43,17 @@ class HomeScreen extends StatelessWidget {
                         height: heroHeight,
                         child: const _HeroScene(),
                       ),
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: TextTicker(
+                      phrases: [
+                        'Sigilo',
+                        'Engaño',
+                        'Peluches en guerra',
+                        '1 contra 1',
+                        'Solo uno será vendido',
+                      ],
                     ),
                   ),
                   SliverFillRemaining(

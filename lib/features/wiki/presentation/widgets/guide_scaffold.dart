@@ -4,8 +4,9 @@ import 'package:flutter/services.dart';
 import '../../../../app/navigation/wiki_routes.dart';
 import '../../../../core/assets/wiki_assets.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/reveal.dart';
 
-class GuideScaffold extends StatelessWidget {
+class GuideScaffold extends StatefulWidget {
   const GuideScaffold({
     super.key,
     required this.title,
@@ -19,6 +20,14 @@ class GuideScaffold extends StatelessWidget {
   final bool showNavigation;
 
   @override
+  State<GuideScaffold> createState() => _GuideScaffoldState();
+}
+
+class _GuideScaffoldState extends State<GuideScaffold> {
+  // The list builds its items lazily: only an item's first build animates.
+  final _revealed = <int>{};
+
+  @override
   Widget build(BuildContext context) => WikiBackground(
     child: SafeArea(
       child: Center(
@@ -26,17 +35,24 @@ class GuideScaffold extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 640),
           child: Column(
             children: [
-              _GuideHeader(title: title),
+              _GuideHeader(title: widget.title),
               Expanded(
                 child: ListView.separated(
-                  key: PageStorageKey('guide-${section.name}-$title'),
+                  key: PageStorageKey(
+                    'guide-${widget.section.name}-${widget.title}',
+                  ),
                   padding: const EdgeInsets.fromLTRB(20, 8, 24, 24),
-                  itemCount: children.length,
+                  itemCount: widget.children.length,
                   separatorBuilder: (_, index) => const SizedBox(height: 18),
-                  itemBuilder: (_, index) => children[index],
+                  itemBuilder: (_, index) => Reveal(
+                    animate: _revealed.add(index),
+                    delay: Duration(milliseconds: 70 * (index < 5 ? index : 0)),
+                    child: widget.children[index],
+                  ),
                 ),
               ),
-              if (showNavigation) _GuideNavigation(current: section),
+              if (widget.showNavigation)
+                _GuideNavigation(current: widget.section),
             ],
           ),
         ),
