@@ -140,6 +140,16 @@ class _Chapters extends StatelessWidget {
           WikiSection.map,
         ),
       ),
+      const SizedBox(height: 14),
+      SizedBox(
+        height: mapHeight * .75,
+        child: const _HomeCategory(
+          'Resultados globales',
+          WikiAssets.health,
+          Palette.orange,
+          WikiSection.scores,
+        ),
+      ),
       const SizedBox(height: 22),
       Center(
         child: Text(
@@ -201,7 +211,9 @@ class _HomeCategory extends StatelessWidget {
         Expanded(
           child: WikiArtwork(
             asset,
-            fit: section == WikiSection.map ? BoxFit.cover : BoxFit.contain,
+            fit: section == WikiSection.map || section == WikiSection.scores
+                ? BoxFit.cover
+                : BoxFit.contain,
           ),
         ),
         const SizedBox(height: 5),

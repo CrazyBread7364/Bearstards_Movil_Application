@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'suite/support/app_harness.dart' show loadWikiFonts, openChapter;
+import 'support/results_fakes.dart';
 
 import 'package:bearstards_movil_application/app/app.dart';
 import 'package:bearstards_movil_application/app/navigation/wiki_routes.dart';
@@ -26,7 +27,9 @@ Future<void> launch(
         textScaler: TextScaler.linear(scale),
         disableAnimations: true,
       ),
-      child: const BearstardsWikiApp(),
+      child: BearstardsWikiApp(
+        resultsRepository: FakeResultsRepository.always(const []),
+      ),
     ),
   );
   await tester.pumpAndSettle();
