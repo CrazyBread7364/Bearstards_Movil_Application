@@ -20,3 +20,16 @@ Se mantienen el oso angular café con hocico claro, el casco verde militar y la 
 - Munición y cierre de partida: las pruebas de Evidencia 1 señalan implementación parcial. La wiki documenta el comportamiento previsto (6 dardos sin recarga y resultado al terminar el tiempo); no asegura el estado actual de una compilación de Unity.
 
 Los textos nuevos explican recogida automática, ausencia de regeneración, casco no acumulable, reaparición con 100 de vida, impacto a la cabeza, penalización por atacar NPC y cambios de fase. Ninguna de estas adiciones introduce otra mecánica.
+
+## Resultados globales
+
+La pantalla Resultados globales no define reglas: muestra lo que informa la API web de la PWA (`GET /api/ranking/`) y no recalcula puntos ni posiciones. Las reglas de puntuación que explica el Arsenal (+200, +350, +400, −50) son las que el juego usa para generar esos totales.
+
+- El orden es el que entrega el servidor: puntos totales de mayor a menor y, en caso de empate, por nombre.
+- Un jugador registrado puede tener 0 partidas; su efectividad se muestra como "—" porque no hay victorias entre cero partidas.
+- Los puntos totales pueden ser negativos, porque golpear a un NPC resta 50.
+- La API ya cuenta los empates (`empates`), pero la pantalla solo muestra partidas y porcentaje de victorias.
+
+### Diferencia entre fuentes
+
+El esquema `resultado-partida.schema.json` del informe del repositorio del juego usa campos distintos (`partida_id`, `jugador`, `resultado`) y solo admite `victoria` y `derrota`. La API actual recibe `match_id` y una lista `jugadores`, y admite `empate`. Conviene confirmar con el equipo del juego que Unity envíe el formato de la API.

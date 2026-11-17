@@ -150,6 +150,7 @@ void main() {
       'Objetos',
       'Arsenal',
       'La Juguetería',
+      'Resultados globales',
     ]) {
       expect(
         find.bySemanticsLabel('Explorar $chapter'),

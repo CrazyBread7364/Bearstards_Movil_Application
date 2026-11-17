@@ -40,6 +40,18 @@ Las reglas de referencia y las diferencias entre los portafolios están en [docs
 
 La wiki funciona sin red: Personajes, Sigilo, Objetos, Arsenal y La Juguetería consultan un catálogo local inyectado mediante WikiRepository. Usa los modelos tipados y los componentes existentes al añadir contenido.
 
+## Resultados globales
+
+La única pantalla que usa red es **Resultados globales**: lee el ranking público de la API de la PWA (`GET /api/ranking/`), sin enviar contraseñas ni tokens. Se abre desde la portada y muestra el podio, la lista, y los estados de carga, vacío, error y datos antiguos (si una recarga falla, conserva el último ranking cargado en la sesión).
+
+La dirección de la API es `https://littlebearstards.com/api` y se puede cambiar al compilar:
+
+```sh
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
+```
+
+`10.0.2.2` es la máquina anfitriona vista desde el emulador de Android. Las pruebas nunca usan la red real: inyectan un repositorio falso (`test/support/results_fakes.dart`) o un cliente HTTP simulado.
+
 ## Revisión visual
 
 ```sh
@@ -65,18 +77,22 @@ Este plan define cómo se verifica Bearstards Wiki: que el contenido de consulta
 | RF-05 | Arsenal: aguja de coser y pistola de dardos, con ficha de detalle. |
 | RF-06 | La Juguetería: mapa, selector de las tres fases y regla de desempate. |
 | RF-07 | Fidelidad del contenido con las reglas del MVP (daño, golpes, puntos, vida, munición, fases). |
-| RF-08 | Funcionamiento sin conexión a red. |
+| RF-08 | La wiki (catálogo local) funciona sin conexión a red. |
 | RF-09 | Adaptación a pantalla pequeña (320×568), texto al 180 % y orientación horizontal. |
 | RF-10 | Etiquetas de accesibilidad (Semantics) en los elementos interactivos. |
 | RF-11 | Integridad técnica: catálogo inmutable, assets empaquetados y entorno reproducible. |
+| RF-12 | Resultados globales: pantalla accesible desde la portada que muestra el ranking público de la API (podio y lista). |
+| RF-13 | Contenido del ranking: orden del servidor, puntos (también negativos), partidas y porcentaje de victorias, con un guion si no hay partidas. |
+| RF-14 | Errores y falta de conexión: estados de carga, vacío y error con Reintentar, y datos antiguos conservados si una recarga falla. |
+| RF-15 | Privacidad: la lectura del ranking es pública y no envía contraseñas, tokens ni cookies. |
 
 ### 3. Fuera del alcance
 
-- El videojuego en Unity, el multijugador con Photon y la PWA de ranking, que tienen su propio plan.
-- Pruebas de carga, de seguridad y de penetración: la app no usa red ni guarda datos personales.
+- El videojuego en Unity, el multijugador con Photon y el servidor y la interfaz web de la PWA, que tienen su propio plan. De la PWA solo se prueba el cliente de la app contra el contrato de `GET /api/ranking/`.
+- Pruebas de carga, de seguridad y de penetración: la app no guarda datos personales ni maneja contraseñas; solo lee el ranking público.
 - Tabletas, escritorio y web: el proyecto solo incluye Android e iOS.
 - Publicación en tiendas y firma de aplicaciones.
-- Funciones que la wiki no implementa: partidas, estadísticas personales, ranking y cuentas.
+- Funciones que la app no implementa: partidas, estadísticas personales, registro e inicio de sesión. Resultados globales es solo lectura del ranking público.
 
 ### 4. Tipos de pruebas
 
@@ -86,6 +102,8 @@ Este plan define cómo se verifica Bearstards Wiki: que el contenido de consulta
 | Unitarias | Catálogo inmutable y completo, ViewModels que notifican solo ante cambios reales, validación del entorno. | `flutter test` |
 | De widgets | Recorridos de navegación, selecciones y detalles con la aplicación real. | `flutter test` |
 | De recursos | Las ilustraciones usadas existen en el paquete y no se empaquetan recursos no usados. | `flutter test` |
+| De contrato (cliente HTTP) | El cliente lee el formato real de `GET /api/ranking/`, distingue fallos del servidor de datos inválidos y no envía credenciales. | `flutter test` con `http/testing` |
+| Con la API real (manual) | Una consulta a producción y un recorrido de la pantalla en emulador con red, sin red y con el servidor caído. | `curl`, emulador Android |
 | De adaptación | Sin desbordes en 320×568, 390×844 con texto al 180 % y 844×390. | `flutter test` |
 | Revisión visual | Capturas reales de los widgets para revisión humana. | `GENERATE_PREVIEWS=true` |
 | Funcionales manuales | Recorrido en emulador o dispositivo contra las reglas del MVP. | Emulador Android, teléfono físico |
@@ -104,7 +122,8 @@ Una prueba se da por aprobada cuando su resultado obtenido coincide con el esper
 | Preparación | `dart tool/verify_environment.dart` y `flutter pub get --enforce-lockfile` |
 | Plataforma principal | Emulador Android y, de ser posible, un teléfono físico |
 | iOS | Requiere macOS con Xcode; si no hay equipo disponible queda registrado como pendiente |
-| Red | Con red y en modo avión para RF-08 |
+| API | `https://littlebearstards.com/api` (`AppConfig.apiBaseUrl`); se cambia con `--dart-define=API_BASE_URL=...` |
+| Red | Con red y en modo avión para RF-08 y RF-14 |
 | Automatización | GitHub Actions (`.github/workflows/ci.yml`): análisis, pruebas y APK de depuración |
 
 ### 6. Datos de prueba
@@ -118,6 +137,9 @@ La aplicación no recibe datos del usuario: los datos de prueba son el contenido
 - Un golpe a la cabeza elimina de inmediato, incluso con casco. Reaparición con 100 de vida. Tres fases de igual duración.
 - Entradas de interacción: las cuatro acciones de sigilo, las tres fases y las cuatro entradas del catálogo.
 - Tamaños de pantalla 320×568, 390×844 y 844×390, con escala de texto 1.0 y 1.8.
+- Ranking de ejemplo (formato real de la API): memo 600, CarlOso 500, AngelOso 200, celaya 0 (sin partidas) y memo2 −150.
+- Casos límite del ranking: lista vacía, jugador sin partidas, puntos negativos, nombres largos, nombres con acento.
+- Respuestas simuladas del servidor: códigos 404, 500 y 503, sin conexión, tiempo agotado, texto que no es JSON y un jugador sin puntos.
 
 ### 7. Riesgos
 
@@ -130,3 +152,8 @@ La aplicación no recibe datos del usuario: los datos de prueba son el contenido
 | Desbordes con texto ampliado o pantallas pequeñas | Media | Alto | Pruebas automáticas de adaptación en tres tamaños |
 | Poco tiempo de pruebas antes de la entrega del 20 de noviembre | Alta | Alto | Ejecutar la suite en cada integración y reservar los últimos días para corrección |
 | Defectos reportados sin datos suficientes | Media | Medio | Issue con pasos, versión de la compilación y captura |
+| Resultados globales depende de un servicio externo (API, hosting y base de datos gratuitos que pueden pausarse o caer) | Media | Medio | Estados de error con Reintentar, últimos datos conservados en la sesión y aviso al usuario (TC-24 a TC-26) |
+| La PWA cambia el formato de `/api/ranking/` sin avisar | Media | Alto | El modelo rechaza campos ausentes o de otro tipo y el cliente lo reporta como formato inesperado (TC-27, TC-28); coordinar cambios con el responsable de la PWA |
+| La pantalla muestra nombres de usuario de otros jugadores | Baja | Medio | Solo muestra lo que la API ya publica en su ranking público y no envía credenciales (TC-29) |
+| Android lanza un primer fotograma de ancho cero y Impeller aborta al decodificar imágenes de 1 píxel | Media | Alto | Protección en `WikiArtwork` y altura de tarjetas no negativa (TC-18) |
+| El ranking no se guarda en disco: sin conexión al abrir la app por primera vez no hay datos que mostrar | Alta | Bajo | Se muestra el mensaje de error con Reintentar; guardar en disco queda fuera del alcance actual |

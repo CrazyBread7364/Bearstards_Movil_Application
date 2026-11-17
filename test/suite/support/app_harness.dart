@@ -1,7 +1,10 @@
 import 'package:bearstards_movil_application/app/app.dart';
+import 'package:bearstards_movil_application/features/results/domain/repositories/results_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/results_fakes.dart';
 
 /// Loads the bundled fonts so text metrics match the device.
 Future<void> loadWikiFonts() async {
@@ -23,6 +26,7 @@ Future<void> launchApp(
   WidgetTester tester, {
   Size size = const Size(390, 844),
   double textScale = 1,
+  ResultsRepository? results,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -36,7 +40,11 @@ Future<void> launchApp(
         // The text ribbon moves forever, so tests would never settle.
         disableAnimations: true,
       ),
-      child: const BearstardsWikiApp(),
+      // Never the real network: tests choose what the results screen gets.
+      child: BearstardsWikiApp(
+        resultsRepository:
+            results ?? FakeResultsRepository.always(sampleRanking),
+      ),
     ),
   );
   await tester.pumpAndSettle();

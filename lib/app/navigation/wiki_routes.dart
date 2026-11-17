@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum WikiSection { home, characters, stealth, objects, arsenal, map }
+enum WikiSection { home, characters, stealth, objects, arsenal, map, scores }
 
 abstract final class WikiRoutes {
   static const home = '/';
@@ -9,6 +9,7 @@ abstract final class WikiRoutes {
   static const objects = '/objects';
   static const arsenal = '/arsenal';
   static const map = '/map';
+  static const scores = '/scores';
   static const detail = '/entry';
 
   static String forSection(WikiSection section) => switch (section) {
@@ -18,6 +19,7 @@ abstract final class WikiRoutes {
     WikiSection.objects => objects,
     WikiSection.arsenal => arsenal,
     WikiSection.map => map,
+    WikiSection.scores => scores,
   };
 
   static void select(
