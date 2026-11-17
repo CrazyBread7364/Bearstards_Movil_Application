@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed to read the global ranking of the web API. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="Bearstards Wiki"
         android:name="${applicationName}"
