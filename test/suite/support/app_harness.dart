@@ -42,7 +42,8 @@ Future<void> launchApp(
       ),
       // Never the real network: tests choose what the results screen gets.
       child: BearstardsWikiApp(
-        resultsRepository: results ?? FakeResultsRepository.always(const []),
+        resultsRepository:
+            results ?? FakeResultsRepository.always(sampleRanking),
       ),
     ),
   );

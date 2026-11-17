@@ -56,3 +56,13 @@ class FakeResultsRepository implements ResultsRepository {
     return step();
   }
 }
+
+/// A small, varied ranking for tests that only need some data on screen: a
+/// leader, long names, a negative score and a player with no games.
+final sampleRanking = [
+  testScore('memo', points: 600, games: 2, wins: 2, id: 1),
+  testScore('CarlOso', points: 500, games: 3, wins: 1, id: 2),
+  testScore('AngelOso', points: 200, games: 3, wins: 2, id: 3),
+  testScore('celaya', id: 4),
+  testScore('memo2', points: -150, games: 2, id: 5),
+];

@@ -23,6 +23,7 @@ Future<void> tourEveryScreen(WidgetTester tester) async {
     WikiRoutes.objects,
     WikiRoutes.arsenal,
     WikiRoutes.map,
+    WikiRoutes.scores,
   ]) {
     navigator.pushNamed(route);
     await checkAndScroll(route);
