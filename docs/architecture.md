@@ -55,6 +55,8 @@ Si en el futuro se necesita otra fuente de datos para la wiki, se implementa Wik
 
 Las pruebas cubren la ruta independiente de Personajes, navegación entre capítulos, artículos y regreso, selecciones de Sigilo/Fases, inmutabilidad del catálogo y distribución de pantallas a 320×568, 390×844 con texto al 180 % y 844×390. Para Resultados globales cubren el modelo, el cliente HTTP con respuestas simuladas, el ViewModel (estados, reintento y datos antiguos) y la pantalla en cada estado.
 
-Los casos de aceptación documentados (caso, prioridad, precondiciones, datos, pasos y resultado esperado) viven en `test/suite/cases.dart` y se ejecutan con `flutter test test/suite`.
+Los casos de aceptación documentados (caso, prioridad, precondiciones, datos, pasos y resultado esperado) viven en `test/suite/cases.dart` y se ejecutan con `flutter test test/suite`. Cada caso pertenece a una historia de usuario (`test/suite/user_stories.dart`), que es su área funcional. Los casos que requieren un dispositivo o la red real están en `test/suite/manual_cases.dart`.
+
+`tool/generate_suite_report.dart` ejecuta la suite, lee los resultados con `tool/suite_report.dart`, los junta con las historias y los casos manuales y genera el documento de entrega (`tool/suite_report_render.dart`) en `docs/entrega/`. `test/suite/` solo importa modelos de Dart puro (`test_case_model.dart`, `user_stories.dart`, `manual_cases.dart`), para que el generador pueda correr con `dart run` sin Flutter.
 
 `flutter test test/visual_preview_test.dart --dart-define=GENERATE_PREVIEWS=true` regenera capturas de los widgets reales en designs/previews con tipografías y assets locales. Se revisan visualmente; no son mockups de ImageGen.
