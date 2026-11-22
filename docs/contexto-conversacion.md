@@ -162,3 +162,14 @@ Qué hace distinta a la PWA frente a la app:
 - Revisar `littlebearstards.com` desde un teléfono por el error de certificado.
 - Repartir ramas entre integrantes si se quiere mostrar autoría de equipo (14 de los 15 commits sin merges son de una sola persona).
 - Probar el paso 1 del rediseño en emulador y hacer su commit.
+
+## Actualización (20 de noviembre de 2026)
+
+Lo implementado desde la primera versión de este documento:
+
+- **Rediseño:** tipografía Lilita One y Fredoka, píldoras y chips toon, secciones crema con ola, portada rediseñada, reglas numeradas en Personajes, puntuación en tarjetas, selector de fases, y las animaciones de entrada, del vaivén de las armas y de la cinta de texto con pausa. Un crasheo de Impeller en el primer fotograma de ancho cero de Android se corrigió en `WikiArtwork` y en la portada (TC-18).
+- **Resultados globales:** pantalla nueva que lee `GET /api/ranking/` de la API de la PWA (`lib/features/results/`), con modelo, cliente HTTP, ViewModel por sesión, estados de carga, vacío, error y datos antiguos. La URL se cambia con `--dart-define=API_BASE_URL`.
+- **CI:** GitHub Actions con análisis, pruebas y APK de depuración.
+- **Suite de pruebas en el formato de la plantilla del profesor:** 8 historias de usuario, 29 casos automatizados (TC-01 a TC-29) y 7 casos manuales (MC-01 a MC-07). El documento de entrega se genera con `dart run tool/generate_suite_report.dart --pdf` y queda en `docs/entrega/`.
+
+Pendientes: ejecutar los casos manuales aún en estado PENDIENTE y anotar su resultado en `test/suite/manual_cases.dart`; limpieza de assets sin usar; cambio del identificador `com.example...` y de la versión; bitácora de commits (`docs/commit-log.md`); decidir el valor de vida máxima con casco (125 o 150); avisar al equipo del juego que el esquema de resultado debe admitir `empate` y usar el formato de la API.

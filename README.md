@@ -52,6 +52,21 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
 
 `10.0.2.2` es la máquina anfitriona vista desde el emulador de Android. Las pruebas nunca usan la red real: inyectan un repositorio falso (`test/support/results_fakes.dart`) o un cliente HTTP simulado.
 
+## Historias de usuario y suite de pruebas (entrega)
+
+La suite sigue la plantilla del curso: ocho **historias de usuario** (Como / Quiero / Para y criterios de aceptación) y la **suite de pruebas** con las columnas No, Caso de prueba, Prioridad, Precondiciones, Datos de entrada, Pasos, Resultados esperado, Resultado obtenido y Estado (OK, FALLO o PENDIENTE), agrupada por área funcional.
+
+- Las historias están en `test/suite/user_stories.dart`; cada caso pertenece a exactamente una.
+- Los casos automatizados (TC-xx) están en `test/suite/cases.dart` y los ejecuta `flutter test test/suite`. Su resultado y estado salen de esa ejecución.
+- Los casos manuales (MC-xx), que necesitan un emulador, un teléfono o la red real, están en `test/suite/manual_cases.dart`. Quien los ejecuta anota el resultado obtenido y el estado en ese archivo.
+- El documento de entrega, con el formato de la plantilla, está en [docs/entrega/suite-de-pruebas.pdf](docs/entrega/suite-de-pruebas.pdf) (y su [HTML](docs/entrega/suite-de-pruebas.html)). Se regenera con:
+
+```sh
+dart run tool/generate_suite_report.dart --pdf
+```
+
+El comando ejecuta la suite, usa las versiones de `toolchain.json`, escribe el HTML y, con `--pdf`, el PDF con Chrome o Edge. Termina con código 1 si algún caso automatizado falla.
+
 ## Revisión visual
 
 ```sh
@@ -106,7 +121,7 @@ Este plan define cómo se verifica Bearstards Wiki: que el contenido de consulta
 | Con la API real (manual) | Una consulta a producción y un recorrido de la pantalla en emulador con red, sin red y con el servidor caído. | `curl`, emulador Android |
 | De adaptación | Sin desbordes en 320×568, 390×844 con texto al 180 % y 844×390. | `flutter test` |
 | Revisión visual | Capturas reales de los widgets para revisión humana. | `GENERATE_PREVIEWS=true` |
-| Funcionales manuales | Recorrido en emulador o dispositivo contra las reglas del MVP. | Emulador Android, teléfono físico |
+| Funcionales manuales | Casos MC-xx en emulador o dispositivo: contenido contra las reglas del MVP, modo avión, botón atrás, instalación del APK y TalkBack. | Emulador Android, teléfono físico |
 | De contenido | Cada cifra y regla mostrada se compara con el Portafolio funcional. | Revisión cruzada |
 | De regresión | Tras corregir un defecto se repite la prueba que lo detectó y se ejecuta la suite completa. | `flutter test` y recorrido manual |
 
